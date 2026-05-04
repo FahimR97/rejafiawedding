@@ -82,7 +82,8 @@
     .section-label { font-family: 'Inter', sans-serif; font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-light); text-align: center; margin: 3rem 0 1.5rem; }
 
     .photo-grid { column-count: 3; column-gap: 4px; }
-    .photo-card { position: relative; overflow: hidden; cursor: pointer; border-radius: 2px; break-inside: avoid; margin-bottom: 4px; clip-path: inset(0 0 100% 0); transition: clip-path 1s cubic-bezier(0.23,1,0.32,1); }
+    .photo-card { position: relative; overflow: hidden; cursor: pointer; border-radius: 2px; break-inside: avoid; margin-bottom: 4px; clip-path: inset(0); transition: clip-path 1s cubic-bezier(0.23,1,0.32,1); }
+    .photo-card.reveal-ready { clip-path: inset(0 0 100% 0); }
     .photo-card.revealed { clip-path: inset(0 0 0 0); }
     .photo-card img { width: 100%; display: block; opacity: 0; transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.23,1,0.32,1); }
     .photo-card img.loaded { opacity: 1; }
@@ -93,7 +94,8 @@
     .photo-card:hover .card-caption { transform: translateY(0); opacity: 1; }
 
     .video-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; }
-    .video-card { position: relative; overflow: hidden; cursor: pointer; aspect-ratio: 16/9; border-radius: 2px; background: #e8e4de; clip-path: inset(0 0 100% 0); transition: clip-path 1s cubic-bezier(0.23,1,0.32,1); }
+    .video-card { position: relative; overflow: hidden; cursor: pointer; aspect-ratio: 16/9; border-radius: 2px; background: #e8e4de; clip-path: inset(0); transition: clip-path 1s cubic-bezier(0.23,1,0.32,1); }
+    .video-card.reveal-ready { clip-path: inset(0 0 100% 0); }
     .video-card.revealed { clip-path: inset(0 0 0 0); }
     .video-card img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0; transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.23,1,0.32,1); }
     .video-card img.loaded { opacity: 1; }
@@ -485,7 +487,10 @@ function initScrollReveal() {
     });
   }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
 
-  document.querySelectorAll('.photo-card, .video-card').forEach(el => observer.observe(el));
+  document.querySelectorAll('.photo-card, .video-card').forEach(el => {
+    el.classList.add('reveal-ready');
+    observer.observe(el);
+  });
 }
 
 // ─── 5. LIGHTBOX ──────────────────────────────────────────────────────────────
