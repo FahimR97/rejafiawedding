@@ -788,6 +788,19 @@
     }
 
 
+    .view-all-link {
+      display: block;
+      text-align: center;
+      margin: 2rem 0 0;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 0.95rem;
+      color: var(--gold);
+      letter-spacing: 0.05em;
+      transition: opacity 0.3s;
+    }
+    .view-all-link:hover { opacity: 0.7; }
+
     /* Accessibility: reduced motion */
     /* Sakura petals — fixed so they overlay while scrolling */
     .sakura { position: fixed !important; z-index: 9999; }
@@ -1108,7 +1121,8 @@
           <h2 class="creator-name">${c.label}</h2>
           ${ornHtml()}
           ${photos.length ? `<p class="media-label">Photos</p>
-            <div class="photo-grid">${photos.map(photoCard).join('')}</div>` : ''}
+            <div class="photo-grid">${photos.map(photoCard).join('')}</div>
+            <a href="${c.key}.html" class="view-all-link">View All Photos →</a>` : ''}
           ${videos.length ? `<p class="media-label">Videos</p>
             <div class="video-grid">${videos.map(videoCard).join('')}</div>` : ''}
         </div>
