@@ -642,6 +642,32 @@
       z-index: 1001;
     }
     #lb-x:hover { color: rgba(250,246,238,0.88); }
+    .lb-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(250,246,238,0.08);
+      border: none;
+      color: rgba(250,246,238,0.5);
+      font-size: 2.5rem;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s, color 0.3s;
+      z-index: 1001;
+    }
+    .lb-nav:hover { background: rgba(250,246,238,0.15); color: rgba(250,246,238,0.9); }
+    .lb-prev { left: 1.25rem; }
+    .lb-next { right: 1.25rem; }
+    @media (max-width: 480px) {
+      .lb-nav { width: 36px; height: 36px; font-size: 1.8rem; }
+      .lb-prev { left: 0.5rem; }
+      .lb-next { right: 0.5rem; }
+    }
 
 
     /* ═══════════════════════════════════════════════
@@ -934,6 +960,8 @@
   <!-- LIGHTBOX -->
   <div id="lb" role="dialog" aria-modal="true" aria-label="Media viewer">
     <button id="lb-x" aria-label="Close">&times;</button>
+    <button id="lb-prev" aria-label="Previous" class="lb-nav lb-prev">&#8249;</button>
+    <button id="lb-next" aria-label="Next" class="lb-nav lb-next">&#8250;</button>
     <div id="lb-in"></div>
   </div>
 
@@ -1122,7 +1150,7 @@
           ${ornHtml()}
           ${photos.length ? `<p class="media-label">Photos</p>
             <div class="photo-grid">${photos.map(photoCard).join('')}</div>
-            <a href="${c.key}.html" class="view-all-link">View All Photos →</a>` : ''}
+            <a href="${c.key}.html" class="view-all-link">View All →</a>` : ''}
           ${videos.length ? `<p class="media-label">Videos</p>
             <div class="video-grid">${videos.map(videoCard).join('')}</div>` : ''}
         </div>
@@ -1159,11 +1187,16 @@
 
   // ─── LIGHTBOX ─────────────────────────────────────────────────────────
   ;(function() {
-    const lb  = document.getElementById('lb')
-    const inn = document.getElementById('lb-in')
-    const cls = document.getElementById('lb-x')
+    const lb   = document.getElementById('lb')
+    const inn  = document.getElementById('lb-in')
+    const cls  = document.getElementById('lb-x')
+    const prev = document.getElementById('lb-prev')
+    const next = document.getElementById('lb-next')
+    let cards = [], idx = 0
 
-    function open(card) {
+    function show(i) {
+      idx = i
+      const card = cards[idx]
       inn.innerHTML = ''
       if (card.dataset.type === 'photo') {
         const img = document.createElement('img')
@@ -1173,9 +1206,18 @@
         const vid = document.createElement('video')
         vid.src = card.dataset.src
         vid.controls = vid.playsInline = true
-        vid.preload  = 'metadata'
+        vid.preload = 'metadata'
         inn.appendChild(vid)
       }
+      prev.style.display = idx > 0 ? '' : 'none'
+      next.style.display = idx < cards.length - 1 ? '' : 'none'
+    }
+
+    function open(card) {
+      cards = Array.from(document.querySelectorAll('[data-type]'))
+      idx = cards.indexOf(card)
+      if (idx === -1) idx = 0
+      show(idx)
       lb.classList.add('open')
       document.body.style.overflow = 'hidden'
     }
@@ -1190,14 +1232,21 @@
       }, 460)
     }
 
+    prev.addEventListener('click', () => { if (idx > 0) show(idx - 1) })
+    next.addEventListener('click', () => { if (idx < cards.length - 1) show(idx + 1) })
+
     document.addEventListener('click', e => {
       const card = e.target.closest('[data-type]')
       if (!card || e.target.closest('.card-dl')) return
       open(card)
     })
-    lb.addEventListener('click',  e => { if (e.target === lb) close() })
+    lb.addEventListener('click', e => { if (e.target === lb) close() })
     cls.addEventListener('click', close)
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') close() })
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') close()
+      if (e.key === 'ArrowLeft' && idx > 0) show(idx - 1)
+      if (e.key === 'ArrowRight' && idx < cards.length - 1) show(idx + 1)
+    })
   })()
 
 
