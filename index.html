@@ -750,13 +750,16 @@
       .crn         { width: 44px; height: 44px; }
       .hero-arch   { width: 88vw; }
       .hero-title  { font-size: clamp(3.2rem, 13vw, 5.5rem); }
-      .creator-block { padding: 0 1rem; }
+      .creator-block { padding: 0 1rem; margin-bottom: 3rem; }
       .photo-grid  { column-count: 2; column-gap: 6px; }
       .photo-card  { margin-bottom: 6px; }
       .video-grid  { gap: 6px; }
-      #download    { padding: 5rem 1.5rem; }
+      #gallery     { padding: 4rem 0 2rem; }
+      #download    { padding: 4rem 1.5rem; }
       .dl-btns     { flex-direction: column; align-items: center; gap: 0.75rem; }
       .btn-dl      { width: 200px; text-align: center; }
+      .interlude   { height: 35vh; min-height: 180px; }
+      .media-label { margin: 2rem 0 1rem; }
     }
 
     @media (max-width: 480px) {
@@ -768,9 +771,12 @@
       .video-grid  { grid-template-columns: 1fr; }
       .creator-name { font-size: 1.8rem; }
       #lb-in img, #lb-in video { max-width: 98vw; max-height: 80vh; }
+      .interlude   { height: 28vh; min-height: 150px; }
+      .crn         { width: 32px; height: 32px; }
+      .hero-arch   { width: 92vw; opacity: 0.6; }
     }
 
-    /* Touch: overlays always visible */
+    /* Touch: disable hover effects, reduce petals */
     @media (hover: none) {
       .pc-overlay           { opacity: 1; }
       .vc-caption           { opacity: 1; transform: none; }
@@ -778,6 +784,7 @@
       .card-dl              { width: 38px; height: 38px; }
       .photo-card img.loaded,
       .video-card  img.loaded { transform: none !important; }
+      .sakura { max-width: 100vw; opacity: 0.6; }
     }
 
 
@@ -1271,38 +1278,43 @@
       })
     }
 
-    // Magnetic buttons
-    document.querySelectorAll('.btn, .btn-outline, .btn-gold, .btn-dl').forEach(function(btn) {
-      btn.addEventListener('mousemove', function(e) {
-        var rect = btn.getBoundingClientRect()
-        var x = e.clientX - rect.left - rect.width / 2
-        var y = e.clientY - rect.top - rect.height / 2
-        gsap.to(btn, { x: x * 0.3, y: y * 0.3, duration: 0.3, ease: 'power2.out' })
-      })
-      btn.addEventListener('mouseleave', function() {
-        gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.5)' })
-      })
-    })
+    // Desktop-only interactions (skip on touch devices)
+    var isTouch = window.matchMedia('(hover: none)').matches
 
-    // Photo card 3D tilt
-    document.querySelectorAll('.photo-card').forEach(function(card) {
-      card.addEventListener('mousemove', function(e) {
-        var rect = card.getBoundingClientRect()
-        var x = (e.clientX - rect.left) / rect.width - 0.5
-        var y = (e.clientY - rect.top) / rect.height - 0.5
-        gsap.to(card, {
-          rotateY: x * 15,
-          rotateX: -y * 15,
-          scale: 1.02,
-          duration: 0.3,
-          ease: 'power2.out',
-          transformPerspective: 600
+    if (!isTouch) {
+      // Magnetic buttons
+      document.querySelectorAll('.btn, .btn-outline, .btn-gold, .btn-dl').forEach(function(btn) {
+        btn.addEventListener('mousemove', function(e) {
+          var rect = btn.getBoundingClientRect()
+          var x = e.clientX - rect.left - rect.width / 2
+          var y = e.clientY - rect.top - rect.height / 2
+          gsap.to(btn, { x: x * 0.3, y: y * 0.3, duration: 0.3, ease: 'power2.out' })
+        })
+        btn.addEventListener('mouseleave', function() {
+          gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.5)' })
         })
       })
-      card.addEventListener('mouseleave', function() {
-        gsap.to(card, { rotateY: 0, rotateX: 0, scale: 1, duration: 0.5, ease: 'elastic.out(1, 0.6)' })
+
+      // Photo card 3D tilt
+      document.querySelectorAll('.photo-card').forEach(function(card) {
+        card.addEventListener('mousemove', function(e) {
+          var rect = card.getBoundingClientRect()
+          var x = (e.clientX - rect.left) / rect.width - 0.5
+          var y = (e.clientY - rect.top) / rect.height - 0.5
+          gsap.to(card, {
+            rotateY: x * 15,
+            rotateX: -y * 15,
+            scale: 1.02,
+            duration: 0.3,
+            ease: 'power2.out',
+            transformPerspective: 600
+          })
+        })
+        card.addEventListener('mouseleave', function() {
+          gsap.to(card, { rotateY: 0, rotateX: 0, scale: 1, duration: 0.5, ease: 'elastic.out(1, 0.6)' })
+        })
       })
-    })
+    }
 
   })
 
