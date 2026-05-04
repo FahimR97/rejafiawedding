@@ -930,6 +930,13 @@
     { c:'sahid', t:'photo', src:'https://picsum.photos/seed/sa07/2400/1600', th:'https://picsum.photos/seed/sa07/800/533', cap:'Evening light' },
     { c:'sahid', t:'photo', src:'https://picsum.photos/seed/sa08/1600/2400', th:'https://picsum.photos/seed/sa08/533/800', cap:'Together' },
     { c:'sahid', t:'video', src:'https://www.w3schools.com/html/mov_bbb.mp4', th:'https://picsum.photos/seed/sv01/800/450', cap:'Ceremony walk' },
+    // Advone
+    { c:'advone', t:'photo', src:'https://picsum.photos/seed/ad01/2400/1600', th:'https://picsum.photos/seed/ad01/800/533', cap:'Bridal prep' },
+    { c:'advone', t:'photo', src:'https://picsum.photos/seed/ad02/1600/2400', th:'https://picsum.photos/seed/ad02/533/800', cap:'Details' },
+    { c:'advone', t:'photo', src:'https://picsum.photos/seed/ad03/2400/1600', th:'https://picsum.photos/seed/ad03/800/533', cap:'The moment' },
+    { c:'advone', t:'photo', src:'https://picsum.photos/seed/ad04/1600/2400', th:'https://picsum.photos/seed/ad04/533/800', cap:'Together' },
+    { c:'advone', t:'photo', src:'https://picsum.photos/seed/ad05/2400/1600', th:'https://picsum.photos/seed/ad05/800/533', cap:'Celebration' },
+    // Finn
     { c:'finn',  t:'photo', src:'https://picsum.photos/seed/fi01/2400/1600', th:'https://picsum.photos/seed/fi01/800/533', cap:'Getting ready' },
     { c:'finn',  t:'photo', src:'https://picsum.photos/seed/fi02/1600/2400', th:'https://picsum.photos/seed/fi02/533/800', cap:'The walk' },
     { c:'finn',  t:'photo', src:'https://picsum.photos/seed/fi03/2400/1600', th:'https://picsum.photos/seed/fi03/800/533', cap:'Joy' },
@@ -1080,8 +1087,9 @@
   function buildGallery() {
     const wrap    = document.getElementById('gc')
     const creators = [
-      { label:'Sahid', key:'sahid' },
-      { label:'Finn',  key:'finn'  },
+      { label:'Sahid',  key:'sahid' },
+      { label:'Advone', key:'advone' },
+      { label:'Finn',   key:'finn'  },
       { label:'Fahim', key:'fahim' },
     ]
     wrap.innerHTML = creators.map((c, ci) => {
