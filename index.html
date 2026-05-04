@@ -318,7 +318,6 @@
   <script>
 // ─── DATA ─────────────────────────────────────────────────────────────────────
 const MEDIA_DATA = [
-  { creator: 'sahid', type: 'photo', src: 'hero.jpg', thumbnail: 'hero.jpg', caption: 'Hero' },
   { creator: 'sahid', type: 'photo', src: 'https://picsum.photos/seed/sa01/2400/1600', thumbnail: 'https://picsum.photos/seed/sa01/800/533', caption: 'The ceremony' },
   { creator: 'sahid', type: 'photo', src: 'https://picsum.photos/seed/sa02/1600/2400', thumbnail: 'https://picsum.photos/seed/sa02/533/800', caption: 'First look' },
   { creator: 'sahid', type: 'photo', src: 'https://picsum.photos/seed/sa03/2400/1600', thumbnail: 'https://picsum.photos/seed/sa03/800/533', caption: 'With family' },
@@ -362,7 +361,13 @@ const allVideos   = MEDIA_DATA.filter(m => m.type === 'video');
   const heroContent = document.getElementById('heroContent');
   if (!container || !MEDIA_DATA.length) return;
 
-  const heroItems = MEDIA_DATA.slice(0, 8);
+  const heroItems = [
+    'hero.jpg',
+    'hero-DSCF2707.jpg',
+    'hero-DSCF2741.jpg',
+    'hero-DSCF2910.jpg',
+    'hero-DSCF3430.jpg',
+  ];
   let current = 0;
   let currentEl = null;
 
@@ -373,23 +378,15 @@ const allVideos   = MEDIA_DATA.filter(m => m.type === 'video');
   ];
 
   function show() {
-    const item = heroItems[current % heroItems.length];
+    const src = heroItems[current % heroItems.length];
     let el;
 
-    if (item.type === 'video') {
-      el = document.createElement('video');
-      el.src = item.src;
-      el.muted = el.loop = el.playsInline = true;
-      el.style.opacity = '0';
-      setTimeout(() => { el.style.opacity = '1'; el.play().catch(() => {}); }, 50);
-    } else {
-      el = document.createElement('img');
-      el.src = item.src;
-      el.alt = '';
-      const kb = kenBurns[current % kenBurns.length];
-      el.style.cssText = `opacity:0; transform:${kb}; transition: opacity 1.6s ease, transform 8s ease;`;
-      setTimeout(() => { el.style.opacity = '1'; el.style.transform = 'scale(1) translate(0,0)'; }, 50);
-    }
+    el = document.createElement('img');
+    el.src = src;
+    el.alt = '';
+    const kb = kenBurns[current % kenBurns.length];
+    el.style.cssText = `opacity:0; transform:${kb}; transition: opacity 1.6s ease, transform 8s ease;`;
+    setTimeout(() => { el.style.opacity = '1'; el.style.transform = 'scale(1) translate(0,0)'; }, 50);
 
     container.appendChild(el);
 
