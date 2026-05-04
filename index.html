@@ -327,6 +327,14 @@ const MEDIA_DATA = [
   { creator: 'sahid', type: 'photo', src: 'https://picsum.photos/seed/sa07/2400/1600', thumbnail: 'https://picsum.photos/seed/sa07/800/533', caption: 'Evening light' },
   { creator: 'sahid', type: 'photo', src: 'https://picsum.photos/seed/sa08/1600/2400', thumbnail: 'https://picsum.photos/seed/sa08/533/800', caption: 'Together' },
   { creator: 'sahid', type: 'video', src: 'https://www.w3schools.com/html/mov_bbb.mp4', thumbnail: 'https://picsum.photos/seed/sv01/800/450', caption: 'Ceremony walk' },
+  // Finn
+  { creator: 'finn', type: 'photo', src: 'https://picsum.photos/seed/fi01/2400/1600', thumbnail: 'https://picsum.photos/seed/fi01/800/533', caption: 'Getting ready' },
+  { creator: 'finn', type: 'photo', src: 'https://picsum.photos/seed/fi02/1600/2400', thumbnail: 'https://picsum.photos/seed/fi02/533/800', caption: 'The walk' },
+  { creator: 'finn', type: 'photo', src: 'https://picsum.photos/seed/fi03/2400/1600', thumbnail: 'https://picsum.photos/seed/fi03/800/533', caption: 'Joy' },
+  { creator: 'finn', type: 'photo', src: 'https://picsum.photos/seed/fi04/1600/2400', thumbnail: 'https://picsum.photos/seed/fi04/533/800', caption: 'Details' },
+  { creator: 'finn', type: 'photo', src: 'https://picsum.photos/seed/fi05/2400/1600', thumbnail: 'https://picsum.photos/seed/fi05/800/533', caption: 'Celebration' },
+  { creator: 'finn', type: 'video', src: 'https://www.w3schools.com/html/mov_bbb.mp4', thumbnail: 'https://picsum.photos/seed/fiv01/800/450', caption: 'Highlights' },
+  // Fahim
   { creator: 'fahim', type: 'photo', src: 'https://picsum.photos/seed/fa01/2400/1600', thumbnail: 'https://picsum.photos/seed/fa01/800/533', caption: 'Reception entrance' },
   { creator: 'fahim', type: 'photo', src: 'https://picsum.photos/seed/fa02/1600/2400', thumbnail: 'https://picsum.photos/seed/fa02/533/800', caption: 'First dance' },
   { creator: 'fahim', type: 'photo', src: 'https://picsum.photos/seed/fa03/2400/1600', thumbnail: 'https://picsum.photos/seed/fa03/800/533', caption: 'Table details' },
@@ -340,6 +348,8 @@ const sahidPhotos = MEDIA_DATA.filter(m => m.creator === 'sahid' && m.type === '
 const sahidVideos = MEDIA_DATA.filter(m => m.creator === 'sahid' && m.type === 'video');
 const fahimPhotos = MEDIA_DATA.filter(m => m.creator === 'fahim' && m.type === 'photo');
 const fahimVideos = MEDIA_DATA.filter(m => m.creator === 'fahim' && m.type === 'video');
+const finnPhotos  = MEDIA_DATA.filter(m => m.creator === 'finn' && m.type === 'photo');
+const finnVideos  = MEDIA_DATA.filter(m => m.creator === 'finn' && m.type === 'video');
 const allPhotos   = MEDIA_DATA.filter(m => m.type === 'photo');
 const allVideos   = MEDIA_DATA.filter(m => m.type === 'video');
 
@@ -419,6 +429,7 @@ function renderGallery() {
 
   const creators = [
     { name: 'Sahid', photos: sahidPhotos, videos: sahidVideos },
+    { name: 'Finn', photos: finnPhotos, videos: finnVideos },
     { name: 'Fahim', photos: fahimPhotos, videos: fahimVideos },
   ];
 
