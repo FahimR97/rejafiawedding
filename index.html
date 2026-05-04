@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sakura-js@1.1.1/dist/sakura.min.css">
   <style>
 
     /* ═══════════════════════════════════════════════
@@ -44,16 +45,6 @@
       -moz-osx-font-smoothing: grayscale;
     }
 
-    /* Film grain — tactile warmth over the whole page */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      z-index: 9997;
-      pointer-events: none;
-      opacity: 0.022;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23g)'/%3E%3C/svg%3E");
-    }
 
     img, video { display: block; max-width: 100%; }
     a { text-decoration: none; color: inherit; }
@@ -66,7 +57,6 @@
     .reveal {
       opacity: 0;
       transform: translateY(10px);
-      will-change: opacity, transform;
       transition:
         opacity   0.82s var(--ease-film),
         transform 0.82s var(--ease-film);
@@ -76,6 +66,7 @@
       opacity: 1;
       transform: none;
     }
+
 
 
     /* ═══════════════════════════════════════════════
@@ -224,13 +215,6 @@
     .crn.tr { top: 1.5rem; right: 1.5rem; }
     .crn.bl { bottom: 1.5rem; left: 1.5rem; }
     .crn.br { bottom: 1.5rem; right: 1.5rem; }
-
-    #px {
-      position: absolute;
-      inset: 0;
-      z-index: 3;
-      pointer-events: none;
-    }
 
     #hero-text {
       position: relative;
@@ -481,7 +465,7 @@
       opacity: 0;
       transition:
         opacity   0.6s ease,
-        transform 0.9s var(--ease-film);
+        transform 0.4s ease;
     }
     .photo-card img.loaded { opacity: 1; }
     .photo-card:hover img.loaded { transform: scale(1.028); }
@@ -668,15 +652,15 @@
       padding: 7rem 2rem;
       text-align: center;
       overflow: hidden;
-      background: #09070a;
+      background: var(--ivory);
     }
-    /* Very large, sparse diamonds — architectural, not chocolate */
     #download::before {
       content: '';
       position: absolute;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M60 8L112 60L60 112L8 60Z' fill='none' stroke='%23b8913a' stroke-width='0.6'/%3E%3C/svg%3E");
-      opacity: 0.055;
+      top: 50%; left: 50%;
+      width: 800px; height: 600px;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(ellipse, rgba(184,145,58,0.04) 0%, transparent 65%);
       pointer-events: none;
     }
     .dl-glow {
@@ -696,7 +680,7 @@
       font-weight: 300;
       font-size: clamp(1.9rem, 4.5vw, 3.6rem);
       line-height: 1.32;
-      color: rgba(250,246,238,0.86);
+      color: var(--ink);
       letter-spacing: 0.02em;
       margin-bottom: 3rem;
     }
@@ -714,8 +698,8 @@
       letter-spacing: 0.26em;
       text-transform: uppercase;
       padding: 0.9rem 2.5rem;
-      border: 1px solid rgba(184,145,58,0.24);
-      color: rgba(250,246,238,0.44);
+      border: 1px solid var(--gold-40);
+      color: var(--ink-30);
       background: transparent;
       cursor: pointer;
       border-radius: 0;
@@ -725,16 +709,16 @@
         background   0.38s var(--ease-soft);
     }
     .btn-dl:hover { border-color: var(--gold); color: var(--gold); }
-    .btn-dl-primary { border-color: rgba(184,145,58,0.38); color: var(--gold); }
-    .btn-dl-primary:hover { background: var(--gold); color: var(--ink); border-color: var(--gold); }
+    .btn-dl-primary { border-color: var(--gold); color: var(--gold); }
+    .btn-dl-primary:hover { background: var(--gold); color: var(--ivory); border-color: var(--gold); }
 
 
     /* ═══════════════════════════════════════════════
        FOOTER
     ═══════════════════════════════════════════════ */
     footer {
-      background: linear-gradient(to bottom, #0b090c 0%, #070508 100%);
-      border-top: 1px solid rgba(184,145,58,0.08);
+      background: var(--ivory);
+      border-top: 1px solid var(--gold-08);
       padding: 3.5rem 2rem;
       text-align: center;
     }
@@ -743,45 +727,18 @@
       font-style: italic;
       font-weight: 400;
       font-size: 1.65rem;
-      color: rgba(250,246,238,0.52);
+      color: var(--ink-30);
       letter-spacing: 0.07em;
     }
-    .footer-names em { color: var(--gold-60); }
+    .footer-names em { color: var(--gold); }
     .footer-date {
       font-size: 0.56rem;
       letter-spacing: 0.32em;
       text-transform: uppercase;
-      color: rgba(184,145,58,0.30);
+      color: var(--gold-40);
       margin-top: 0.55rem;
     }
 
-
-    /* ═══════════════════════════════════════════════
-       PETALS
-    ═══════════════════════════════════════════════ */
-    #petals {
-      position: fixed;
-      inset: 0;
-      z-index: 9996;
-      pointer-events: none;
-    }
-
-    /* ═══════════════════════════════════════════════
-       CURSOR GLOW — smooth lerp follow
-    ═══════════════════════════════════════════════ */
-    #cg {
-      position: fixed;
-      top: 0; left: 0;
-      width: 520px; height: 520px;
-      border-radius: 50%;
-      background: radial-gradient(circle,
-        rgba(184,145,58,0.038) 0%,
-        transparent 62%);
-      pointer-events: none;
-      will-change: transform;
-      z-index: 9998;
-    }
-    @media (hover: none) { #cg { display: none; } }
 
 
     /* ═══════════════════════════════════════════════
@@ -823,7 +780,24 @@
       .video-card  img.loaded { transform: none !important; }
     }
 
+
+    /* Accessibility: reduced motion */
+    /* Sakura petals — fixed so they overlay while scrolling */
+    .sakura { position: fixed !important; z-index: 9999; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .sakura { display: none !important; }
+    }
+
   </style>
+<script src="https://cdn.jsdelivr.net/npm/sakura-js@1.1.1/dist/sakura.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 </head>
 <body>
 
@@ -887,8 +861,6 @@
       <circle cx="64" cy="24" r="1.2" fill="#b8913a" opacity="0.18"/>
     </svg>
 
-    <canvas id="px"></canvas>
-
     <div id="hero-text">
       <div class="hero-glow"></div>
       <h1 class="hero-title">
@@ -944,12 +916,6 @@
     <button id="lb-x" aria-label="Close">&times;</button>
     <div id="lb-in"></div>
   </div>
-
-  <!-- PETALS -->
-  <canvas id="petals" aria-hidden="true"></canvas>
-
-  <!-- CURSOR GLOW -->
-  <div id="cg" aria-hidden="true"></div>
 
   <script>
 
@@ -1065,167 +1031,7 @@
   })()
 
 
-  // ─── PARTICLES ────────────────────────────────────────────────────────
-  ;(function() {
-    const cv  = document.getElementById('px')
-    const ctx = cv.getContext('2d')
-    let W, H, pts = []
 
-    function resize() {
-      W = cv.width  = cv.offsetWidth
-      H = cv.height = cv.offsetHeight
-    }
-    function spawn() {
-      return {
-        x:  Math.random() * W,
-        y:  H + Math.random() * 60,
-        r:  Math.random() * 1.5 + 0.3,
-        vy: Math.random() * 0.38 + 0.1,
-        vx: (Math.random() - 0.5) * 0.15,
-        a:  Math.random() * 0.32 + 0.06,
-      }
-    }
-    function init() {
-      resize()
-      pts = Array.from({ length: 50 }, spawn)
-      pts.forEach(p => { p.y = Math.random() * H })
-    }
-    function draw() {
-      ctx.clearRect(0, 0, W, H)
-      for (const p of pts) {
-        ctx.beginPath()
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(184,145,58,${p.a})`
-        ctx.fill()
-        p.y -= p.vy
-        p.x += p.vx
-        p.a -= 0.00045
-        if (p.y < -8 || p.a <= 0) Object.assign(p, spawn())
-      }
-      requestAnimationFrame(draw)
-    }
-    window.addEventListener('resize', resize)
-    init(); draw()
-  })()
-
-
-  // ─── PETALS — marigold + leaf, scroll-triggered ───────────────────────
-  ;(function() {
-    const cv  = document.getElementById('petals')
-    const ctx = cv.getContext('2d')
-    let W, H, pool = [], lastY = 0
-
-    function resize() {
-      W = cv.width  = window.innerWidth
-      H = cv.height = window.innerHeight
-    }
-
-    function makePetal() {
-      const leaf = Math.random() < 0.22
-      return {
-        x:     Math.random() * W,
-        y:     -14,
-        vx:    (Math.random() - 0.5) * 1.1,
-        vy:    Math.random() * 1.4 + 0.7,
-        rot:   Math.random() * Math.PI * 2,
-        vrot:  (Math.random() - 0.5) * 0.055,
-        size:  Math.random() * 7 + 5,
-        alpha: Math.random() * 0.52 + 0.28,
-        sway:  Math.random() * Math.PI * 2,
-        swayS: Math.random() * 0.022 + 0.008,
-        swayA: Math.random() * 0.5 + 0.15,
-        leaf,
-      }
-    }
-
-    function draw(p) {
-      ctx.save()
-      ctx.translate(p.x, p.y)
-      ctx.rotate(p.rot)
-      ctx.globalAlpha = p.alpha
-
-      if (p.leaf) {
-        ctx.beginPath()
-        ctx.moveTo(0, -p.size * 1.7)
-        ctx.quadraticCurveTo( p.size * 0.9, -p.size * 0.5, 0,  p.size * 0.55)
-        ctx.quadraticCurveTo(-p.size * 0.9, -p.size * 0.5, 0, -p.size * 1.7)
-        ctx.fillStyle = '#6b8c48'
-        ctx.fill()
-        ctx.beginPath()
-        ctx.moveTo(0, -p.size * 1.6)
-        ctx.lineTo(0,  p.size * 0.45)
-        ctx.strokeStyle = 'rgba(30,55,15,0.28)'
-        ctx.lineWidth = 0.7
-        ctx.stroke()
-      } else {
-        ctx.beginPath()
-        ctx.moveTo(0, -p.size * 1.35)
-        ctx.bezierCurveTo( p.size * 0.52, -p.size, p.size * 0.52, -p.size * 0.18, 0, 0)
-        ctx.bezierCurveTo(-p.size * 0.52, -p.size * 0.18, -p.size * 0.52, -p.size, 0, -p.size * 1.35)
-        const g = ctx.createLinearGradient(0, -p.size * 1.3, 0, 0)
-        g.addColorStop(0, 'rgba(214,128,38,0.92)')
-        g.addColorStop(1, 'rgba(236,168,58,0.55)')
-        ctx.fillStyle = g
-        ctx.fill()
-      }
-      ctx.restore()
-    }
-
-    function tick() {
-      ctx.clearRect(0, 0, W, H)
-      for (let i = pool.length - 1; i >= 0; i--) {
-        const p = pool[i]
-        p.sway += p.swayS
-        p.x    += p.vx + Math.sin(p.sway) * p.swayA
-        p.y    += p.vy
-        p.rot  += p.vrot
-        if (p.y > H * 0.72) p.alpha -= 0.009
-        if (p.y > H + 16 || p.alpha <= 0) { pool.splice(i, 1); continue }
-        draw(p)
-      }
-      requestAnimationFrame(tick)
-    }
-
-    window.addEventListener('scroll', () => {
-      const sy  = window.scrollY
-      const vel = Math.abs(sy - lastY)
-      lastY = sy
-      // Only spawn when scrolled past hero, cap pool at 50
-      if (sy < window.innerHeight * 0.5 || pool.length >= 50 || vel < 3) return
-      const n = Math.min(Math.floor(vel / 10) + 1, 4)
-      for (let i = 0; i < n; i++) pool.push(makePetal())
-    }, { passive: true })
-
-    window.addEventListener('resize', resize)
-    resize(); tick()
-  })()
-
-
-  // ─── CURSOR GLOW — smooth lerp, GPU-composited ─────────────────────────
-  ;(function() {
-    const g = document.getElementById('cg')
-    if (!g) return
-    // Half of the element size to centre it on cursor
-    const R = 260
-    let cx = -R, cy = -R
-    let tx = -R, ty = -R
-    let active = false
-
-    document.addEventListener('mousemove', e => {
-      if (!active) { cx = e.clientX; cy = e.clientY; active = true }
-      tx = e.clientX
-      ty = e.clientY
-    }, { passive: true })
-
-    ;(function loop() {
-      if (active) {
-        cx += (tx - cx) * 0.08
-        cy += (ty - cy) * 0.08
-        g.style.transform = `translate(${cx - R}px, ${cy - R}px)`
-      }
-      requestAnimationFrame(loop)
-    })()
-  })()
 
 
   // ─── GALLERY RENDER ───────────────────────────────────────────────────
@@ -1312,6 +1118,8 @@
       entries.forEach(e => {
         if (!e.isIntersecting) return
         e.target.classList.add('in')
+        // Add scale-in for photo cards
+        if (e.target.classList.contains('photo-card')) e.target.classList.add('scale-in')
         obs.unobserve(e.target)
       })
     }, { threshold: 0.06, rootMargin: '0px 0px -20px 0px' })
@@ -1382,6 +1190,126 @@
     buildGallery()
     buildInterludes()
     initReveal()
+  })
+
+  // ─── GSAP ANIMATIONS ────────────────────────────────────────────────────
+  gsap.registerPlugin(ScrollTrigger)
+
+  // Wait for gallery to render
+  window.addEventListener('load', function() {
+
+    // Batch reveal for all cards — more reliable than individual ScrollTriggers
+    ScrollTrigger.batch('.photo-card, .video-card', {
+      start: 'top 90%',
+      onEnter: function(batch) {
+        gsap.fromTo(batch, 
+          { y: 30, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.7, stagger: 0.06, ease: 'power2.out', overwrite: true }
+        )
+      },
+      once: true
+    })
+
+    // Creator blocks fade in
+    ScrollTrigger.batch('.creator-block', {
+      start: 'top 90%',
+      onEnter: function(batch) {
+        gsap.fromTo(batch,
+          { y: 40, opacity: 0 },
+          { y: 0, opacity: 1, duration: 1, ease: 'power3.out', overwrite: true }
+        )
+      },
+      once: true
+    })
+
+    // Creator name text reveal — each letter animates in
+    gsap.utils.toArray('.creator-name').forEach(function(el) {
+      var text = el.textContent
+      el.innerHTML = text.split('').map(function(ch) {
+        return ch === ' ' ? ' ' : '<span style="display:inline-block">' + ch + '</span>'
+      }).join('')
+      ScrollTrigger.create({
+        trigger: el,
+        start: 'top 88%',
+        once: true,
+        onEnter: function() {
+          gsap.fromTo(el.querySelectorAll('span'),
+            { y: 25, opacity: 0, rotateX: -50 },
+            { y: 0, opacity: 1, rotateX: 0, duration: 0.5, stagger: 0.04, ease: 'back.out(1.7)' }
+          )
+        }
+      })
+    })
+
+    // Parallax on interlude images
+    gsap.utils.toArray('.interlude').forEach(function(el) {
+      gsap.to(el, {
+        backgroundPositionY: '30%',
+        ease: 'none',
+        scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: true }
+      })
+    })
+
+    // Download section reveal
+    var dlBody = document.getElementById('dl-body')
+    if (dlBody) {
+      ScrollTrigger.create({
+        trigger: dlBody,
+        start: 'top 90%',
+        once: true,
+        onEnter: function() {
+          gsap.fromTo(dlBody, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'power3.out' })
+        }
+      })
+    }
+
+    // Magnetic buttons
+    document.querySelectorAll('.btn, .btn-outline, .btn-gold, .btn-dl').forEach(function(btn) {
+      btn.addEventListener('mousemove', function(e) {
+        var rect = btn.getBoundingClientRect()
+        var x = e.clientX - rect.left - rect.width / 2
+        var y = e.clientY - rect.top - rect.height / 2
+        gsap.to(btn, { x: x * 0.3, y: y * 0.3, duration: 0.3, ease: 'power2.out' })
+      })
+      btn.addEventListener('mouseleave', function() {
+        gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.5)' })
+      })
+    })
+
+    // Photo card 3D tilt
+    document.querySelectorAll('.photo-card').forEach(function(card) {
+      card.addEventListener('mousemove', function(e) {
+        var rect = card.getBoundingClientRect()
+        var x = (e.clientX - rect.left) / rect.width - 0.5
+        var y = (e.clientY - rect.top) / rect.height - 0.5
+        gsap.to(card, {
+          rotateY: x * 15,
+          rotateX: -y * 15,
+          scale: 1.02,
+          duration: 0.3,
+          ease: 'power2.out',
+          transformPerspective: 600
+        })
+      })
+      card.addEventListener('mouseleave', function() {
+        gsap.to(card, { rotateY: 0, rotateX: 0, scale: 1, duration: 0.5, ease: 'elastic.out(1, 0.6)' })
+      })
+    })
+
+  })
+
+  // ─── SAKURA PETALS ──────────────────────────────────────────────────────
+  var sakura = new Sakura('body', {
+    colors: [
+      { gradientColorStart: 'rgba(255,170,50,0.9)', gradientColorEnd: 'rgba(240,140,20,0.8)', gradientColorDegree: 120 },
+      { gradientColorStart: 'rgba(255,190,180,0.85)', gradientColorEnd: 'rgba(240,150,165,0.7)', gradientColorDegree: 130 },
+      { gradientColorStart: 'rgba(255,252,245,0.9)', gradientColorEnd: 'rgba(255,245,230,0.7)', gradientColorDegree: 110 },
+      { gradientColorStart: 'rgba(120,175,80,0.8)', gradientColorEnd: 'rgba(90,145,50,0.6)', gradientColorDegree: 140 },
+    ],
+    maxSize: 18,
+    minSize: 10,
+    delay: 150,
+    fallSpeed: 1,
   })
 
   </script>
