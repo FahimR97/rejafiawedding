@@ -115,25 +115,25 @@
     .lightbox__close:hover { background: rgba(250,248,245,0.2); color: #fff; }
 
     /* ── DOWNLOAD ── */
-    .download { background: var(--bg-dark); padding: 8rem 2rem; text-align: center; position: relative; overflow: hidden; }
-    .dl-glow { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 600px; height: 400px; background: radial-gradient(ellipse, rgba(196,162,101,0.08) 0%, transparent 70%); pointer-events: none; }
-    .download h2 { font-family: 'Playfair Display', serif; font-weight: 400; font-style: italic; font-size: clamp(2.2rem, 5vw, 4.5rem); color: var(--bg); margin-bottom: 1rem; position: relative; }
-    .download p { font-family: 'Inter', sans-serif; font-size: 0.75rem; letter-spacing: 0.15em; color: rgba(250,248,245,0.35); margin-bottom: 3.5rem; position: relative; }
+    .download { background: var(--bg); padding: 8rem 2rem; text-align: center; position: relative; overflow: hidden; border-top: 1px solid rgba(196,162,101,0.12); }
+    .dl-glow { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 600px; height: 400px; background: radial-gradient(ellipse, rgba(196,162,101,0.06) 0%, transparent 70%); pointer-events: none; }
+    .download h2 { font-family: 'Playfair Display', serif; font-weight: 400; font-style: italic; font-size: clamp(2.2rem, 5vw, 4.5rem); color: var(--text); margin-bottom: 1rem; position: relative; }
+    .download p { font-family: 'Inter', sans-serif; font-size: 0.75rem; letter-spacing: 0.15em; color: var(--text-light); margin-bottom: 3.5rem; position: relative; }
     .dl-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; position: relative; }
-    .btn--dl { font-family: 'Inter', sans-serif; font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; padding: 0.85rem 2.5rem; border: 1px solid rgba(196,162,101,0.3); color: rgba(250,248,245,0.5); background: transparent; cursor: pointer; transition: all 0.3s; border-radius: 0; }
+    .btn--dl { font-family: 'Inter', sans-serif; font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; padding: 0.85rem 2.5rem; border: 1px solid rgba(196,162,101,0.3); color: var(--text-light); background: transparent; cursor: pointer; transition: all 0.3s; border-radius: 0; }
     .btn--dl:hover { border-color: var(--gold); color: var(--gold); }
     .btn--dl-primary { border-color: var(--gold); color: var(--gold); animation: pulse 3s ease infinite; }
-    .btn--dl-primary:hover { background: var(--gold); color: var(--bg-dark); }
+    .btn--dl-primary:hover { background: var(--gold); color: var(--bg); }
     @keyframes pulse {
       0%, 100% { box-shadow: 0 0 0 0 rgba(196,162,101,0.2); }
       50% { box-shadow: 0 0 0 8px rgba(196,162,101,0); }
     }
 
     /* ── FOOTER ── */
-    .footer { background: var(--bg-dark); border-top: 1px solid rgba(196,162,101,0.08); padding: 3rem 2rem; text-align: center; }
-    .footer-names { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.5rem; color: rgba(250,248,245,0.6); }
+    .footer { background: var(--bg); border-top: 1px solid rgba(196,162,101,0.12); padding: 3rem 2rem; text-align: center; }
+    .footer-names { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.5rem; color: var(--text-light); }
     .footer-names .amp { color: var(--gold); }
-    .footer-date { font-family: 'Inter', sans-serif; font-size: 0.58rem; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(196,162,101,0.3); margin-top: 0.5rem; }
+    .footer-date { font-family: 'Inter', sans-serif; font-size: 0.58rem; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(196,162,101,0.5); margin-top: 0.5rem; }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
