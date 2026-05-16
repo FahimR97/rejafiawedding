@@ -1128,7 +1128,6 @@
     { c:'sahid', t:'photo', src:'https://pub-1bab4a8b6280486dbe1ad8b1512bcbda.r2.dev/sahid/photos/0006.jpg', th:'https://pub-1bab4a8b6280486dbe1ad8b1512bcbda.r2.dev/sahid/photos/0006.jpg', cap:'The vows' },
     { c:'sahid', t:'photo', src:'https://pub-1bab4a8b6280486dbe1ad8b1512bcbda.r2.dev/sahid/photos/0007.jpg', th:'https://pub-1bab4a8b6280486dbe1ad8b1512bcbda.r2.dev/sahid/photos/0007.jpg', cap:'Evening light' },
     { c:'sahid', t:'photo', src:'https://pub-1bab4a8b6280486dbe1ad8b1512bcbda.r2.dev/sahid/photos/0008.jpg', th:'https://pub-1bab4a8b6280486dbe1ad8b1512bcbda.r2.dev/sahid/photos/0008.jpg', cap:'Together' },
-    { c:'sahid', t:'video', src:'https://www.w3schools.com/html/mov_bbb.mp4', th:'https://picsum.photos/seed/sv01/800/450', cap:'Ceremony walk' },
     // Advone
     { c:'advone', t:'photo', src:'https://picsum.photos/seed/ad01/2400/1600', th:'https://picsum.photos/seed/ad01/800/533', cap:'Bridal prep' },
     { c:'advone', t:'photo', src:'https://picsum.photos/seed/ad02/1600/2400', th:'https://picsum.photos/seed/ad02/533/800', cap:'Details' },
@@ -1574,14 +1573,14 @@
     function make() {
       return {
         x:     Math.random() * W,
-        y:     -16,
-        vx:    (Math.random() - 0.5) * 0.5,
-        vy:    Math.random() * 0.6 + 0.35,
+        y:     -20,
+        vx:    (Math.random() - 0.5) * 0.6,
+        vy:    Math.random() * 0.7 + 0.4,
         rot:   Math.random() * Math.PI * 2,
-        vrot:  (Math.random() - 0.5) * 0.014,
-        w:     Math.random() * 6 + 5,
-        h:     Math.random() * 10 + 8,
-        alpha: Math.random() * 0.18 + 0.22,
+        vrot:  (Math.random() - 0.5) * 0.016,
+        w:     Math.random() * 8 + 7,
+        h:     Math.random() * 14 + 11,
+        alpha: Math.random() * 0.22 + 0.42,
         sway:  Math.random() * Math.PI * 2,
         swayS: Math.random() * 0.008 + 0.003,
         swayA: Math.random() * 0.20 + 0.06,
@@ -1598,9 +1597,9 @@
       ctx.bezierCurveTo( p.w, -p.h * 0.5,  p.w * 0.8,  p.h * 0.3, 0,  p.h)
       ctx.bezierCurveTo(-p.w * 0.8,  p.h * 0.3, -p.w, -p.h * 0.5, 0, -p.h)
       const g = ctx.createLinearGradient(0, -p.h, 0, p.h)
-      g.addColorStop(0,   'rgba(255,200,218,0.95)')
-      g.addColorStop(0.5, 'rgba(245,165,190,0.85)')
-      g.addColorStop(1,   'rgba(220,125,158,0.65)')
+      g.addColorStop(0,   'rgba(255,182,210,0.98)')
+      g.addColorStop(0.5, 'rgba(248,140,185,0.90)')
+      g.addColorStop(1,   'rgba(225,95,155,0.72)')
       ctx.fillStyle = g
       ctx.fill()
       ctx.restore()
@@ -1609,7 +1608,7 @@
     function tick() {
       ctx.clearRect(0, 0, W, H)
       frame++
-      if (frame % 260 === 0 && pool.length < 10) pool.push(make())
+      if (frame % 200 === 0 && pool.length < 16) pool.push(make())
 
       for (let i = pool.length - 1; i >= 0; i--) {
         const p = pool[i]
