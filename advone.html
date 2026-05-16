@@ -31,8 +31,8 @@
     .card-caption{font-family:var(--serif);font-style:italic;font-size:0.9rem;color:rgba(250,246,238,0.92);margin-bottom:0.45rem}
     .card-dl{align-self:flex-end;width:32px;height:32px;border-radius:50%;background:rgba(184,145,58,0.80);display:flex;align-items:center;justify-content:center;color:#fff;transition:background 0.3s,transform 0.35s var(--ease-film)}
     .card-dl:hover{background:var(--gold);transform:scale(1.12)}.card-dl svg{width:12px;height:12px}
-    .video-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:3.25rem}
-    .video-card{position:relative;overflow:hidden;aspect-ratio:16/9;cursor:pointer;background:var(--parchment);border-radius:1px}
+    .video-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+    .video-card{position:relative;overflow:hidden;aspect-ratio:9/16;cursor:pointer;background:var(--parchment);border-radius:1px}
     .video-card img{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 0.6s ease,transform 0.9s var(--ease-film)}
     .video-card img.loaded{opacity:1}.video-card:hover img.loaded{transform:scale(1.028)}
     .vc-overlay{position:absolute;inset:0;z-index:2;background:linear-gradient(to top,rgba(28,20,10,0.55) 0%,rgba(28,20,10,0.04) 100%);display:flex;align-items:center;justify-content:center;transition:background 0.5s var(--ease-soft)}
@@ -54,7 +54,7 @@
     .footer-date{font-size:0.56rem;letter-spacing:0.32em;text-transform:uppercase;color:var(--gold-40);margin-top:0.55rem}
     @media(max-width:860px){.photo-grid{column-count:2}}
     @media(max-width:768px){#nav{padding:0.85rem 1.25rem}.gallery-section{padding:3rem 1rem 2rem}.photo-grid{column-count:2;column-gap:6px}.photo-card{margin-bottom:6px}.video-grid{gap:6px}}
-    @media(max-width:560px){.video-grid{grid-template-columns:1fr}}
+    @media(max-width:640px){.video-grid{grid-template-columns:repeat(2,1fr)}}
     @media(max-width:480px){.photo-grid{column-count:1}#lb-in img,#lb-in video{max-width:98vw;max-height:80vh}}
     @media(hover:none){.pc-overlay{opacity:1}.vc-caption{opacity:1;transform:none}.vc-dl{opacity:1}.photo-card img.loaded,.video-card img.loaded{transform:none!important}}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}#petals{display:none!important}}
@@ -67,20 +67,24 @@
   <nav id="nav"><a href="index.html" class="nav-logo">R <em>&amp;</em> A</a><a href="index.html" class="nav-back">← Home</a></nav>
   <section class="page-hero"><h1>Advone</h1><div class="page-hero-rule"></div></section>
   <div class="gallery-section">
-    <p class="media-label">Photos</p>
-    <div class="photo-grid" id="pg"></div>
-    <p class="media-label" style="margin-top:3.25rem">Videos</p>
+    <p class="media-label">Videos</p>
     <div class="video-grid" id="vg"></div>
   </div>
   <footer><a href="index.html" class="footer-names">Rejaul <em>&amp;</em> Afia</a><p class="footer-date">3rd May 2026</p></footer>
   <div id="lb" role="dialog" aria-modal="true" aria-label="Media viewer"><button id="lb-x" aria-label="Close">&times;</button><button id="lb-prev" aria-label="Previous" class="lb-nav lb-prev">&#8249;</button><button id="lb-next" aria-label="Next" class="lb-nav lb-next">&#8250;</button><div id="lb-in"></div></div>
   <script>
   const dl=`<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2v8M5 7l3 3 3-3M2 12v2h12v-2"/></svg>`
-  const caps=['Bridal prep','Details','The moment','Together','Celebration','Quiet grace','The walk','Floral arrangement','Candid joy','Embracing','The veil','Soft light','Laughter','Ceremony','Final glance']
-  document.getElementById('pg').innerHTML=Array.from({length:15},(_,i)=>{const h=i%2===0?1600:2400;const th=i%2===0?533:800;return`<div class="photo-card" data-src="https://picsum.photos/seed/advone${String(i+1).padStart(2,'0')}/2400/${h}" data-type="photo"><img src="https://picsum.photos/seed/advone${String(i+1).padStart(2,'0')}/800/${th}" alt="${caps[i]}" loading="lazy" onload="this.classList.add('loaded')"><div class="pc-overlay"><p class="card-caption">${caps[i]}</p><a href="https://picsum.photos/seed/advone${String(i+1).padStart(2,'0')}/2400/${h}" download class="card-dl" onclick="event.stopPropagation()">${dl}</a></div></div>`}).join('')
-  document.getElementById('vg').innerHTML=`<div class="video-card" data-src="https://www.w3schools.com/html/mov_bbb.mp4" data-type="video"><img src="https://picsum.photos/seed/advonev1/800/450" alt="Highlights reel" loading="lazy" onload="this.classList.add('loaded')"><div class="vc-overlay"><div class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div><p class="vc-caption">Highlights reel</p><a href="https://www.w3schools.com/html/mov_bbb.mp4" download class="card-dl vc-dl" onclick="event.stopPropagation()">${dl}</a></div>`
+  const BASE='https://pub-1bab4a8b6280486dbe1ad8b1512bcbda.r2.dev'
+  const VIDEOS=[
+    {n:'0001',title:'A message for Afia'},
+    {n:'0002',title:'A&R Ceremony'},
+    {n:'0003',title:'Arrival moments'},
+    {n:'0004',title:'Bentley moments'},
+    {n:'0005',title:'Family moments'}
+  ]
+  document.getElementById('vg').innerHTML=VIDEOS.map(v=>`<div class="video-card" data-src="${BASE}/advone/videos/${v.n}.mp4" data-type="video"><img src="${BASE}/advone/thumbs/${v.n}.jpg" alt="${v.title}" loading="lazy" onload="this.classList.add('loaded')"><div class="vc-overlay"><div class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div><p class="vc-caption">${v.title}</p><a href="${BASE}/advone/videos/${v.n}.mp4" download class="card-dl vc-dl" onclick="event.stopPropagation()">${dl}</a></div>`).join('')
   ;(function(){const lb=document.getElementById('lb'),inn=document.getElementById('lb-in'),cls=document.getElementById('lb-x'),prv=document.getElementById('lb-prev'),nxt=document.getElementById('lb-next');let cards=[],idx=0;function show(i){idx=i;const c=cards[idx];inn.innerHTML='';if(c.dataset.type==='photo'){const img=document.createElement('img');img.src=c.dataset.src;inn.appendChild(img)}else{const v=document.createElement('video');v.src=c.dataset.src;v.controls=v.playsInline=true;v.preload='metadata';inn.appendChild(v)}prv.style.display=idx>0?'':'none';nxt.style.display=idx<cards.length-1?'':'none'}function open(c){cards=Array.from(document.querySelectorAll('[data-type]'));idx=cards.indexOf(c);if(idx===-1)idx=0;show(idx);lb.classList.add('open');document.body.style.overflow='hidden'}function close(){lb.classList.remove('open');document.body.style.overflow='';setTimeout(function(){const v=inn.querySelector('video');if(v)v.pause();inn.innerHTML=''},460)}prv.addEventListener('click',function(){if(idx>0)show(idx-1)});nxt.addEventListener('click',function(){if(idx<cards.length-1)show(idx+1)});document.addEventListener('click',function(e){const c=e.target.closest('[data-type]');if(!c||e.target.closest('.card-dl'))return;open(c)});lb.addEventListener('click',function(e){if(e.target===lb)close()});cls.addEventListener('click',close);document.addEventListener('keydown',function(e){if(e.key==='Escape')close();if(e.key==='ArrowLeft'&&idx>0)show(idx-1);if(e.key==='ArrowRight'&&idx<cards.length-1)show(idx+1)})})()
-  gsap.registerPlugin(ScrollTrigger);window.addEventListener('load',function(){ScrollTrigger.batch('.photo-card,.video-card',{start:'top 90%',onEnter:function(b){gsap.fromTo(b,{y:30,opacity:0},{y:0,opacity:1,duration:0.7,stagger:0.06,ease:'power2.out',overwrite:true})},once:true})})
+  gsap.registerPlugin(ScrollTrigger);window.addEventListener('load',function(){ScrollTrigger.batch('.video-card',{start:'top 90%',onEnter:function(b){gsap.fromTo(b,{y:30,opacity:0},{y:0,opacity:1,duration:0.7,stagger:0.06,ease:'power2.out',overwrite:true})},once:true})})
   ;(function(){const cv=document.getElementById('petals');if(!cv)return;const ctx=cv.getContext('2d');let W,H,pool=[],lastY=0,frame=0,mx=-9999,my=-9999;function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight}function make(){return{x:Math.random()*W,y:-16,vx:(Math.random()-0.5)*0.4,vy:Math.random()*0.55+0.3,rot:Math.random()*Math.PI*2,vrot:(Math.random()-0.5)*0.012,w:Math.random()*5+4,h:Math.random()*9+7,alpha:Math.random()*0.16+0.20,sway:Math.random()*Math.PI*2,swayS:Math.random()*0.007+0.003,swayA:Math.random()*0.18+0.05,phase:Math.random()*Math.PI*2,swayA2:Math.random()*0.08+0.02}}function draw(p){ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.globalAlpha=p.alpha;ctx.beginPath();ctx.moveTo(0,-p.h);ctx.bezierCurveTo(p.w,-p.h*0.5,p.w*0.8,p.h*0.3,0,p.h);ctx.bezierCurveTo(-p.w*0.8,p.h*0.3,-p.w,-p.h*0.5,0,-p.h);const g=ctx.createLinearGradient(0,-p.h,0,p.h);g.addColorStop(0,'rgba(255,252,254,0.90)');g.addColorStop(0.5,'rgba(252,240,248,0.75)');g.addColorStop(1,'rgba(242,224,234,0.52)');ctx.fillStyle=g;ctx.fill();ctx.restore()}function tick(){ctx.clearRect(0,0,W,H);frame++;if(frame%300===0&&pool.length<8)pool.push(make());for(let i=pool.length-1;i>=0;i--){const p=pool[i];const rdx=p.x-mx,rdy=p.y-my,rd2=rdx*rdx+rdy*rdy;if(rd2<100*100&&rd2>0){const rd=Math.sqrt(rd2),f=(100-rd)/100*1.1;p.vx+=(rdx/rd)*f;p.vy+=(rdy/rd)*f}p.vx*=0.92;p.vy=Math.min(Math.max(p.vy,0.25),6);p.sway+=p.swayS;p.x+=p.vx+Math.sin(p.sway)*p.swayA+Math.sin(p.sway*1.7+p.phase)*p.swayA2;p.y+=p.vy;p.rot+=p.vrot;if(p.y>H*0.75)p.alpha-=0.006;if(p.y>H+20||p.alpha<=0){pool.splice(i,1);continue}draw(p)}requestAnimationFrame(tick)}window.addEventListener('scroll',function(){const sy=window.scrollY,vel=Math.abs(sy-lastY);lastY=sy;if(sy<window.innerHeight*0.5)return;if(vel>2)pool.forEach(function(p){p.vy=Math.min(p.vy+vel*0.04,6)});if(pool.length<20&&vel>=4){const n=Math.min(Math.floor(vel/10)+1,3);for(let i=0;i<n;i++)pool.push(make())}},{passive:true});window.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY},{passive:true});window.addEventListener('resize',resize);resize();tick()})()
   </script>
 </body>
