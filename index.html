@@ -1637,7 +1637,8 @@
       const vel = Math.abs(sy - lastY)
       lastY = sy
       if (sy < window.innerHeight * 0.5) return
-      if (pool.length < 18 && vel >= 12) pool.push(make())
+      if (vel > 3) pool.forEach(p => { p.vy = Math.min(p.vy + vel * 0.02, 4) })
+      if (pool.length < 20 && vel >= 6) pool.push(make())
     }, { passive: true })
 
     window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY }, { passive: true })
