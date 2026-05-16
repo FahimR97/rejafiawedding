@@ -984,6 +984,7 @@
   </style>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 </head>
 <body>
 
@@ -1090,9 +1091,9 @@
     <div class="reveal" id="dl-body">
       <h2 class="dl-heading">Captured with love.<br><em>Kept forever.</em></h2>
       <div class="dl-btns">
-        <button class="btn-dl"             onclick="dlAll('photo')">Photos</button>
-        <button class="btn-dl"             onclick="dlAll('video')">Videos</button>
-        <button class="btn-dl btn-dl-primary" onclick="dlAll('all')">Everything</button>
+        <button class="btn-dl"             onclick="dlAll('photo',this)">Photos</button>
+        <button class="btn-dl"             onclick="dlAll('video',this)">Videos</button>
+        <button class="btn-dl btn-dl-primary" onclick="dlAll('all',this)">Everything</button>
       </div>
     </div>
   </section>
@@ -1400,15 +1401,48 @@
 
 
   // ─── DOWNLOAD ─────────────────────────────────────────────────────────
-  function dlAll(type) {
-    const items = type === 'all' ? MEDIA : MEDIA.filter(m => m.t === type)
-    items.forEach((m, i) => setTimeout(() => {
+  const R2 = 'https://pub-1bab4a8b6280486dbe1ad8b1512bcbda.r2.dev'
+
+  async function dlAll(type, btn) {
+    const items = (type === 'all' ? MEDIA : MEDIA.filter(m => m.t === type))
+      .filter(m => m.src.startsWith(R2))
+
+    if (!items.length) return
+
+    const orig = btn.textContent
+    btn.disabled = true
+
+    try {
+      const zip = new JSZip()
+
+      for (let i = 0; i < items.length; i++) {
+        const m = items[i]
+        btn.textContent = `${i + 1} / ${items.length}`
+        const res = await fetch(m.src)
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        zip.file(
+          `${m.c}_${String(i + 1).padStart(3, '0')}${m.t === 'video' ? '.mp4' : '.jpg'}`,
+          await res.blob()
+        )
+      }
+
+      btn.textContent = 'Zipping…'
+      const blob = await zip.generateAsync({ type: 'blob', compression: 'STORE' })
+      const zipName = type === 'all' ? 'rejaul-afia-everything' : `rejaul-afia-${type}s`
       const a = Object.assign(document.createElement('a'), {
-        href: m.src,
-        download: m.cap.replace(/\s+/g, '-').toLowerCase(),
+        href: URL.createObjectURL(blob),
+        download: `${zipName}.zip`
       })
-      document.body.appendChild(a); a.click(); a.remove()
-    }, i * 200))
+      a.click()
+      setTimeout(() => URL.revokeObjectURL(a.href), 8000)
+
+    } catch (e) {
+      console.error(e)
+      alert('Download failed — please try again.')
+    } finally {
+      btn.textContent = orig
+      btn.disabled = false
+    }
   }
 
 
