@@ -512,27 +512,22 @@
       column-gap: 8px;
     }
     @media (max-width: 860px) { .photo-grid { column-count: 2; } }
-    /* Mobile: editorial portrait grid — clean, modern, even */
+    /* Mobile: uniform 2-column square grid */
     @media (max-width: 560px) {
       .photo-grid {
         column-count: unset !important;
         display: grid !important;
         grid-template-columns: repeat(2, 1fr);
-        gap: 3px;
+        gap: 2px;
       }
       .photo-card {
         margin-bottom: 0;
-        aspect-ratio: 3 / 4;
-        border-radius: 2px;
+        aspect-ratio: 1;
+        border-radius: 0;
       }
       .photo-card img {
         height: 100%;
         object-fit: cover;
-      }
-      /* First photo spans full width for editorial hierarchy */
-      .photo-card:first-child {
-        grid-column: 1 / -1;
-        aspect-ratio: 4 / 3;
       }
     }
 
