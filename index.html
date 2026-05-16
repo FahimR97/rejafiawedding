@@ -1567,7 +1567,7 @@
     const cv  = document.getElementById('petals')
     if (!cv) return
     const ctx = cv.getContext('2d')
-    let W, H, pool = [], lastY = 0, frame = 0
+    let W, H, pool = [], lastY = 0, frame = 0, mx = -9999, my = -9999
 
     function resize() { W = cv.width = window.innerWidth; H = cv.height = window.innerHeight }
 
@@ -1664,6 +1664,21 @@
 
       for (let i = pool.length - 1; i >= 0; i--) {
         const p = pool[i]
+
+        // Mouse repulsion
+        const rdx = p.x - mx, rdy = p.y - my
+        const rd2 = rdx * rdx + rdy * rdy
+        if (rd2 < 110 * 110 && rd2 > 0) {
+          const rd = Math.sqrt(rd2)
+          const f  = (110 - rd) / 110 * 1.5
+          p.vx += (rdx / rd) * f
+          p.vy += (rdy / rd) * f
+        }
+
+        // Dampen vx back toward zero, cap vy so flowers don't rocket off
+        p.vx *= 0.91
+        p.vy  = Math.min(Math.max(p.vy, 0.3), 8)
+
         p.sway += p.swayS
         p.x    += p.vx + Math.sin(p.sway) * p.swayA
         p.y    += p.vy
@@ -1679,11 +1694,17 @@
       const sy  = window.scrollY
       const vel = Math.abs(sy - lastY)
       lastY = sy
-      if (sy < window.innerHeight * 0.5 || pool.length >= 28 || vel < 4) return
-      const n = Math.min(Math.floor(vel / 12) + 1, 3)
-      for (let i = 0; i < n; i++) pool.push(makeLily())
+      if (sy < window.innerHeight * 0.5) return
+      // Boost existing flowers — they rush down with the scroll
+      if (vel > 2) pool.forEach(p => { p.vy = Math.min(p.vy + vel * 0.06, 8) })
+      // Spawn new ones on faster scroll
+      if (pool.length < 28 && vel >= 4) {
+        const n = Math.min(Math.floor(vel / 12) + 1, 3)
+        for (let i = 0; i < n; i++) pool.push(makeLily())
+      }
     }, { passive: true })
 
+    window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY }, { passive: true })
     window.addEventListener('resize', resize)
     resize(); tick()
   })()
