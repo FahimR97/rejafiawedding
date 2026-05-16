@@ -1056,7 +1056,7 @@
         <span class="hero-amp h-in" style="--d:0.32s">&amp;</span>
         <span class="h-in" style="--d:0.58s">Afia</span>
       </h1>
-      <p class="hero-date h-in" style="--d:0.88s">3rd May 2026</p>
+      <p class="hero-date h-in" style="--d:0.88s">3rd May 2026 &nbsp;·&nbsp; ৩রা মে ২০২৬</p>
       <div class="hero-ctas h-in" style="--d:1.18s">
         <a href="#gallery"  class="btn btn-outline">View Gallery</a>
         <a href="#download" class="btn btn-gold">Download All</a>
@@ -1637,8 +1637,7 @@
       const vel = Math.abs(sy - lastY)
       lastY = sy
       if (sy < window.innerHeight * 0.5) return
-      if (vel > 3) pool.forEach(p => { p.vy = Math.min(p.vy + vel * 0.02, 4) })
-      if (pool.length < 20 && vel >= 6) pool.push(make())
+      if (pool.length < 20 && vel >= 8) pool.push(make())
     }, { passive: true })
 
     window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY }, { passive: true })
