@@ -512,7 +512,29 @@
       column-gap: 8px;
     }
     @media (max-width: 860px) { .photo-grid { column-count: 2; } }
-    @media (max-width: 480px) { .photo-grid { column-count: 1; } }
+    /* Mobile: editorial portrait grid — clean, modern, even */
+    @media (max-width: 560px) {
+      .photo-grid {
+        column-count: unset !important;
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 3px;
+      }
+      .photo-card {
+        margin-bottom: 0;
+        aspect-ratio: 3 / 4;
+        border-radius: 2px;
+      }
+      .photo-card img {
+        height: 100%;
+        object-fit: cover;
+      }
+      /* First photo spans full width for editorial hierarchy */
+      .photo-card:first-child {
+        grid-column: 1 / -1;
+        aspect-ratio: 4 / 3;
+      }
+    }
 
     .photo-card {
       break-inside: avoid;
@@ -904,8 +926,7 @@
       .crn.bl      { bottom: 1rem; left: 1rem; }
       .crn.br      { bottom: 1rem; right: 1rem; }
       .hero-arch   { display: none; }
-      .photo-grid  { column-count: 2; column-gap: 4px; }
-      .photo-card  { margin-bottom: 4px; }
+      .photo-grid  { gap: 3px; }
       .video-grid  { grid-template-columns: 1fr; }
       .creator-name { font-size: 1.6rem; }
       #lb-in img, #lb-in video { max-width: 100vw; max-height: 85vh; }
