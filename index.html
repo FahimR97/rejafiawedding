@@ -1129,11 +1129,11 @@
     { c:'sahid', t:'photo', src:'https://pub-1bab4a8b6280486dbe1ad8b1512bcbda.r2.dev/sahid/photos/0007.jpg', th:'https://pub-1bab4a8b6280486dbe1ad8b1512bcbda.r2.dev/sahid/photos/0007.jpg', cap:'Evening light' },
     { c:'sahid', t:'photo', src:'https://pub-1bab4a8b6280486dbe1ad8b1512bcbda.r2.dev/sahid/photos/0008.jpg', th:'https://pub-1bab4a8b6280486dbe1ad8b1512bcbda.r2.dev/sahid/photos/0008.jpg', cap:'Together' },
     // Advone
-    { c:'advone', t:'photo', src:'https://picsum.photos/seed/ad01/2400/1600', th:'https://picsum.photos/seed/ad01/800/533', cap:'Bridal prep' },
-    { c:'advone', t:'photo', src:'https://picsum.photos/seed/ad02/1600/2400', th:'https://picsum.photos/seed/ad02/533/800', cap:'Details' },
-    { c:'advone', t:'photo', src:'https://picsum.photos/seed/ad03/2400/1600', th:'https://picsum.photos/seed/ad03/800/533', cap:'The moment' },
-    { c:'advone', t:'photo', src:'https://picsum.photos/seed/ad04/1600/2400', th:'https://picsum.photos/seed/ad04/533/800', cap:'Together' },
-    { c:'advone', t:'photo', src:'https://picsum.photos/seed/ad05/2400/1600', th:'https://picsum.photos/seed/ad05/800/533', cap:'Celebration' },
+    { c:'advone', t:'video', src:'https://pub-1bab4a8b6280486dbe1ad8b1512bcbda.r2.dev/advone/videos/0001.mp4', th:'https://pub-1bab4a8b6280486dbe1ad8b1512bcbda.r2.dev/advone/thumbs/0001.jpg', cap:'A message for Afia' },
+    { c:'advone', t:'video', src:'https://pub-1bab4a8b6280486dbe1ad8b1512bcbda.r2.dev/advone/videos/0002.mp4', th:'https://pub-1bab4a8b6280486dbe1ad8b1512bcbda.r2.dev/advone/thumbs/0002.jpg', cap:'A&R Ceremony' },
+    { c:'advone', t:'video', src:'https://pub-1bab4a8b6280486dbe1ad8b1512bcbda.r2.dev/advone/videos/0003.mp4', th:'https://pub-1bab4a8b6280486dbe1ad8b1512bcbda.r2.dev/advone/thumbs/0003.jpg', cap:'Arrival moments' },
+    { c:'advone', t:'video', src:'https://pub-1bab4a8b6280486dbe1ad8b1512bcbda.r2.dev/advone/videos/0004.mp4', th:'https://pub-1bab4a8b6280486dbe1ad8b1512bcbda.r2.dev/advone/thumbs/0004.jpg', cap:'Bentley moments' },
+    { c:'advone', t:'video', src:'https://pub-1bab4a8b6280486dbe1ad8b1512bcbda.r2.dev/advone/videos/0005.mp4', th:'https://pub-1bab4a8b6280486dbe1ad8b1512bcbda.r2.dev/advone/thumbs/0005.jpg', cap:'Family moments' },
     // Finn
     { c:'finn',  t:'photo', src:'https://picsum.photos/seed/fi01/2400/1600', th:'https://picsum.photos/seed/fi01/800/533', cap:'Getting ready' },
     { c:'finn',  t:'photo', src:'https://picsum.photos/seed/fi02/1600/2400', th:'https://picsum.photos/seed/fi02/533/800', cap:'The walk' },
@@ -1301,10 +1301,10 @@
           <h2 class="creator-name">${c.label}</h2>
           ${ornHtml()}
           ${photos.length ? `<p class="media-label">Photos</p>
-            <div class="photo-grid">${photos.map(photoCard).join('')}</div>
-            <a href="${c.key}.html" class="view-all-link">View all content</a>` : ''}
+            <div class="photo-grid">${photos.map(photoCard).join('')}</div>` : ''}
           ${videos.length ? `<p class="media-label">Videos</p>
             <div class="video-grid">${videos.map(videoCard).join('')}</div>` : ''}
+          <a href="${c.key}.html" class="view-all-link">View all content</a>
         </div>
         ${ci < creators.length - 1
           ? `<div style="max-width:1300px;margin:0 auto;padding:0 2.5rem">${ornHtml()}</div>`
