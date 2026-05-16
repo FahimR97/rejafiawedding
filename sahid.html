@@ -22,7 +22,7 @@
     .gallery-section{max-width:1300px;margin:0 auto;padding:4rem 2.5rem 2rem}
     .media-label{font-size:0.56rem;letter-spacing:0.32em;text-transform:uppercase;color:var(--gold);text-align:center;margin:0 0 1.25rem;opacity:0.65}
     .photo-grid{column-count:3;column-gap:8px}
-    .photo-card{break-inside:avoid;position:relative;overflow:hidden;margin-bottom:8px;cursor:pointer;background:var(--parchment);border-radius:1px;background-image:linear-gradient(110deg,#f3e8d8 30%,#eddfc8 50%,#f3e8d8 70%);background-size:200% 100%;animation:shimmer 1.6s infinite}
+    .photo-card{break-inside:avoid;position:relative;overflow:hidden;margin-bottom:8px;cursor:pointer;background:var(--parchment);border-radius:1px;background-image:linear-gradient(110deg,#f3e8d8 30%,#eddfc8 50%,#f3e8d8 70%);background-size:200% 100%;animation:shimmer 1.6s infinite;min-height:200px}
     @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
     .photo-card.loaded-card{animation:none;background-image:none}
     .photo-card::after{content:'';position:absolute;inset:5px;border:1px solid rgba(255,255,255,0.10);pointer-events:none;z-index:3}
