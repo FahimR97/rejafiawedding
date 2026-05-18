@@ -71,6 +71,42 @@
       padding: 3rem 1rem 4rem;
     }
 
+    .section-label {
+      font-size: 0.56rem; letter-spacing: 0.32em; text-transform: uppercase;
+      color: var(--ink-30); margin-bottom: 1rem; margin-top: 2.5rem;
+    }
+    .section-label:first-child { margin-top: 0; }
+
+    /* ── Photo masonry ── */
+    .photo-grid { column-count: 3; column-gap: 10px; margin-bottom: 0.5rem; }
+    @media (max-width: 860px) { .photo-grid { column-count: 2; } }
+
+    .photo-card {
+      break-inside: avoid; position: relative; overflow: hidden;
+      margin-bottom: 10px; cursor: pointer;
+      background: var(--parchment); border-radius: 3px;
+    }
+    .photo-card img { width: 100%; height: auto; display: block; transition: transform 0.7s var(--ease-film); }
+    .photo-card:hover img { transform: scale(1.03); }
+    .pc-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(28,20,10,0.55) 0%, transparent 55%);
+      opacity: 0; transition: opacity 0.4s var(--ease-soft); z-index: 2;
+    }
+    .photo-card:hover .pc-overlay { opacity: 1; }
+    .pc-dl {
+      position: absolute; bottom: 0.7rem; right: 0.7rem; z-index: 4;
+      width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(184,145,58,0.80);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; opacity: 0;
+      transition: opacity 0.35s var(--ease-film), background 0.3s, transform 0.3s;
+    }
+    .photo-card:hover .pc-dl { opacity: 1; }
+    .pc-dl:hover { background: var(--gold); transform: scale(1.1); }
+    .pc-dl svg { width: 12px; height: 12px; }
+    @media (hover: none) { .pc-dl { opacity: 1; } }
+
     /* Mobile-first: 1 column */
     .video-grid {
       display: grid;
@@ -78,29 +114,19 @@
       gap: 14px;
     }
 
-    /* Tablet: 2 columns, 5th centred */
+    /* Tablet: clean 2-column pairs */
     @media (min-width: 600px) {
-      .video-grid {
-        grid-template-columns: repeat(4, 1fr);
-      }
-      .video-card:nth-child(1) { grid-column: 1 / 3; }
-      .video-card:nth-child(2) { grid-column: 3 / 5; }
-      .video-card:nth-child(3) { grid-column: 1 / 3; }
-      .video-card:nth-child(4) { grid-column: 3 / 5; }
-      .video-card:nth-child(5) { grid-column: 2 / 4; }
+      .video-grid { grid-template-columns: repeat(4, 1fr); }
+      .video-card:nth-child(odd)  { grid-column: 1 / 3; }
+      .video-card:nth-child(even) { grid-column: 3 / 5; }
     }
 
-    /* Desktop: 3 columns, last 2 centred */
+    /* Desktop: 3 columns, 2 even rows of 3 */
     @media (min-width: 960px) {
-      .video-grid {
-        grid-template-columns: repeat(6, 1fr);
-        gap: 16px;
-      }
-      .video-card:nth-child(1) { grid-column: 1 / 3; }
-      .video-card:nth-child(2) { grid-column: 3 / 5; }
-      .video-card:nth-child(3) { grid-column: 5 / 7; }
-      .video-card:nth-child(4) { grid-column: 2 / 4; }
-      .video-card:nth-child(5) { grid-column: 4 / 6; }
+      .video-grid { grid-template-columns: repeat(6, 1fr); gap: 16px; }
+      .video-card:nth-child(1), .video-card:nth-child(4) { grid-column: 1 / 3; }
+      .video-card:nth-child(2), .video-card:nth-child(5) { grid-column: 3 / 5; }
+      .video-card:nth-child(3), .video-card:nth-child(6) { grid-column: 5 / 7; }
     }
 
     /* ── CARD ── */
@@ -203,6 +229,12 @@
       transition: opacity 0.5s var(--ease-film), transform 0.5s var(--ease-film);
     }
     #lb.open #lb-in { opacity: 1; transform: none; }
+    #lb-in img {
+      max-width: min(92vw, 700px);
+      max-height: 88vh;
+      border-radius: 3px;
+      display: block;
+    }
     #lb-in video {
       max-width: min(92vw, 420px);
       max-height: 88vh;
@@ -260,10 +292,13 @@
   <header class="page-hero">
     <h1>Advone</h1>
     <div class="page-hero-rule"></div>
-    <p class="page-hero-sub">5 films</p>
+    <p class="page-hero-sub">21 photos &nbsp;·&nbsp; 6 films</p>
   </header>
 
   <div class="gallery-wrap">
+    <p class="section-label">Photos</p>
+    <div class="photo-grid" id="pg"></div>
+    <p class="section-label">Films</p>
     <div class="video-grid" id="vg"></div>
   </div>
 
@@ -281,16 +316,35 @@
 
   <script>
   const BASE = 'https://pub-1bab4a8b6280486dbe1ad8b1512bcbda.r2.dev'
+
+  const PHOTOS = [
+    '0001','0002','0003','0004','0005','0006','0007','0008','0009','0010',
+    '0011','0012','0013','0014','0015','0016','0017','0018','0019','0020','0021'
+  ]
+
   const VIDEOS = [
     { n:'0001', title:'A message for Afia' },
     { n:'0002', title:'A&R Ceremony' },
     { n:'0003', title:'Arrival moments' },
     { n:'0004', title:'Bentley moments' },
     { n:'0005', title:'Family moments' },
+    { n:'0006', title:'To the Bride and Groom' },
   ]
+
   const dlSvg = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2v8M5 7l3 3 3-3M2 12v2h12v-2"/></svg>`
 
-  // ── Render ────────────────────────────────────────────────────────────
+  // ── Render photos ─────────────────────────────────────────────────────
+  document.getElementById('pg').innerHTML = PHOTOS.map(n => `
+    <div class="photo-card" data-src="${BASE}/advone/photos/${n}.jpg" data-type="photo">
+      <img src="${BASE}/advone/photo-thumbs/${n}.jpg" alt="" loading="lazy"
+           onload="this.style.opacity=1" style="opacity:0;transition:opacity 0.5s">
+      <div class="pc-overlay"></div>
+      <a href="${BASE}/advone/photos/${n}.jpg" download class="pc-dl"
+         onclick="event.stopPropagation()" title="Download">${dlSvg}</a>
+    </div>
+  `).join('')
+
+  // ── Render videos ─────────────────────────────────────────────────────
   document.getElementById('vg').innerHTML = VIDEOS.map(v => `
     <div class="video-card" data-src="${BASE}/advone/videos/${v.n}.mp4" data-type="video">
       <img src="${BASE}/advone/thumbs/${v.n}.jpg" alt="${v.title}" loading="lazy">
@@ -305,25 +359,32 @@
     </div>
   `).join('')
 
-  // ── Lightbox ──────────────────────────────────────────────────────────
+  // ── Lightbox (photos + videos) ────────────────────────────────────────
   ;(function() {
     const lb  = document.getElementById('lb')
     const inn = document.getElementById('lb-in')
     const cls = document.getElementById('lb-x')
     const prv = document.getElementById('lb-prev')
     const nxt = document.getElementById('lb-next')
-    let idx = 0
+    let cards = [], idx = 0
 
     function show(i) {
       idx = i
+      const card = cards[idx]
       inn.innerHTML = ''
-      const v = document.createElement('video')
-      v.src = `${BASE}/advone/videos/${VIDEOS[idx].n}.mp4`
-      v.controls = v.playsInline = true
-      v.preload = 'metadata'
-      inn.appendChild(v)
+      if (card.dataset.type === 'photo') {
+        const img = document.createElement('img')
+        img.src = card.dataset.src
+        inn.appendChild(img)
+      } else {
+        const v = document.createElement('video')
+        v.src = card.dataset.src
+        v.controls = v.playsInline = true
+        v.preload = 'metadata'
+        inn.appendChild(v)
+      }
       prv.style.display = idx > 0 ? '' : 'none'
-      nxt.style.display = idx < VIDEOS.length - 1 ? '' : 'none'
+      nxt.style.display = idx < cards.length - 1 ? '' : 'none'
     }
 
     function open(i) { show(i); lb.classList.add('open'); document.body.style.overflow = 'hidden' }
@@ -332,24 +393,27 @@
       setTimeout(() => { const v = inn.querySelector('video'); if (v) v.pause(); inn.innerHTML = '' }, 420)
     }
 
-    document.querySelectorAll('.video-card').forEach((card, i) => {
-      card.addEventListener('click', e => { if (!e.target.closest('.vc-dl')) open(i) })
+    // Collect all cards after render
+    cards = Array.from(document.querySelectorAll('.photo-card, .video-card'))
+    cards.forEach((card, i) => {
+      card.addEventListener('click', e => { if (!e.target.closest('.vc-dl, .pc-dl')) open(i) })
     })
     prv.addEventListener('click', () => { if (idx > 0) show(idx - 1) })
-    nxt.addEventListener('click', () => { if (idx < VIDEOS.length - 1) show(idx + 1) })
+    nxt.addEventListener('click', () => { if (idx < cards.length - 1) show(idx + 1) })
     lb.addEventListener('click', e => { if (e.target === lb) close() })
     cls.addEventListener('click', close)
     document.addEventListener('keydown', e => {
+      if (!lb.classList.contains('open')) return
       if (e.key === 'Escape') close()
       if (e.key === 'ArrowLeft' && idx > 0) show(idx - 1)
-      if (e.key === 'ArrowRight' && idx < VIDEOS.length - 1) show(idx + 1)
+      if (e.key === 'ArrowRight' && idx < cards.length - 1) show(idx + 1)
     })
   })()
 
   // ── GSAP scroll entrance ──────────────────────────────────────────────
   gsap.registerPlugin(ScrollTrigger)
   window.addEventListener('load', () => {
-    ScrollTrigger.batch('.video-card', {
+    ScrollTrigger.batch('.photo-card, .video-card', {
       start: 'top 92%',
       onEnter: b => gsap.fromTo(b,
         { y: 28, opacity: 0 },
