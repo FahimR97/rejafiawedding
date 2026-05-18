@@ -464,7 +464,7 @@
     function tick() {
       ctx.clearRect(0, 0, W, H)
       frame++
-      if (frame % 300 === 0 && pool.length < 8) pool.push(make())
+      if (frame % 120 === 0 && pool.length < 12) pool.push(make())
       for (let i = pool.length - 1; i >= 0; i--) {
         const p = pool[i]
         const rdx = p.x - mx, rdy = p.y - my, rd2 = rdx * rdx + rdy * rdy
@@ -490,7 +490,14 @@
     }, { passive: true })
     window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY }, { passive: true })
     window.addEventListener('resize', resize)
-    resize(); tick()
+    resize()
+    // Seed a handful of petals spread across the viewport on load
+    for (let i = 0; i < 8; i++) {
+      const p = make()
+      p.y = Math.random() * H * 0.7  // already in-frame
+      pool.push(p)
+    }
+    tick()
   })()
   </script>
 </body>
