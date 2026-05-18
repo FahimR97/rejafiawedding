@@ -1002,12 +1002,87 @@
       #petals, #px { display: none !important; }
     }
 
+    /* ── Page transition curtain ── */
+    #curtain {
+      position: fixed; inset: 0;
+      background: var(--ivory);
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 1;
+      transition: opacity 0.55s cubic-bezier(0.16, 1, 0.30, 1);
+    }
+
+    /* ── Horizontal photo strip ── */
+    #strip-section {
+      overflow: hidden;
+      height: 100svh;
+      background: var(--parchment);
+    }
+    #strip-track {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      gap: 1.5rem;
+      padding: 0 7vw;
+      will-change: transform;
+    }
+    .strip-intro-card {
+      flex-shrink: 0;
+      width: 20vw;
+      min-width: 160px;
+      height: 80svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding-bottom: 2.5rem;
+    }
+    .strip-intro-title {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(1.8rem, 3.2vw, 3rem);
+      line-height: 1.15;
+      color: var(--ink);
+    }
+    .strip-intro-title em { color: var(--gold); font-style: normal; }
+    .strip-scroll-hint {
+      margin-top: 1.2rem;
+      font-size: 0.56rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--ink-30);
+    }
+    .strip-card {
+      flex-shrink: 0;
+      width: 28vw;
+      height: 80svh;
+      overflow: hidden;
+      border-radius: 2px;
+      position: relative;
+    }
+    .strip-card img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.8s var(--ease-film);
+    }
+    .strip-card:hover img { transform: scale(1.04); }
+    @media (max-width: 768px) {
+      .strip-intro-card { width: 60vw; }
+      .strip-card { width: 70vw; height: 72svh; }
+    }
+    @media (max-width: 480px) {
+      .strip-card { width: 80vw; height: 64svh; }
+      .strip-intro-card { width: 72vw; }
+    }
+
   </style>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 </head>
 <body>
+  <div id="curtain"></div>
 
   <!-- NAV -->
   <nav id="nav">
@@ -1090,6 +1165,17 @@
       <div class="scroll-line"></div>
     </div>
   </section>
+
+  <!-- HORIZONTAL PHOTO STRIP -->
+  <div id="strip-section">
+    <div id="strip-track">
+      <div class="strip-intro-card">
+        <p class="strip-intro-title">A glimpse<br><em>from the day</em></p>
+        <p class="strip-scroll-hint">Scroll to explore →</p>
+      </div>
+      <!-- cards injected by JS -->
+    </div>
+  </div>
 
   <!-- PARALLAX INTERLUDE 1 -->
   <div class="interlude" id="il1"></div>
@@ -1333,6 +1419,20 @@
   }
 
 
+  // ─── HORIZONTAL STRIP ────────────────────────────────────────────────
+  function buildStrip() {
+    const track = document.getElementById('strip-track')
+    if (!track) return
+    const R2 = 'https://pub-1bab4a8b6280486dbe1ad8b1512bcbda.r2.dev'
+    const nums = ['0001','0002','0003','0004','0005','0006','0007','0008','0009','0010','0011','0012']
+    track.insertAdjacentHTML('beforeend', nums.map((n, i) => `
+      <div class="strip-card">
+        <img src="${R2}/sahid/photos/${n}.jpg" alt="" loading="${i < 4 ? 'eager' : 'lazy'}">
+      </div>
+    `).join(''))
+  }
+
+
   // ─── MOBILE MASONRY ───────────────────────────────────────────────────
   function initMasonryMobile() {
     if (window.innerWidth > 560) return
@@ -1489,6 +1589,7 @@
 
   // ─── INIT ─────────────────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', () => {
+    buildStrip()
     buildGallery()
     initMasonryMobile()
     buildInterludes()
@@ -1500,6 +1601,23 @@
 
   // Wait for gallery to render
   window.addEventListener('load', function() {
+
+    // Horizontal photo strip
+    var stripTrack = document.getElementById('strip-track')
+    if (stripTrack) {
+      var getAmt = function() { return stripTrack.scrollWidth - window.innerWidth }
+      gsap.to(stripTrack, {
+        x: function() { return -getAmt() },
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '#strip-section',
+          pin: true,
+          scrub: 1,
+          end: function() { return '+=' + getAmt() },
+          invalidateOnRefresh: true
+        }
+      })
+    }
 
     // Batch reveal for all cards — more reliable than individual ScrollTriggers
     ScrollTrigger.batch('.photo-card, .video-card', {
@@ -1740,6 +1858,23 @@
       }
       requestAnimationFrame(loop)
     })()
+  })()
+
+  // ─── PAGE TRANSITIONS ────────────────────────────────────────────────────
+  ;(function() {
+    const c = document.getElementById('curtain')
+    if (!c) return
+    requestAnimationFrame(() => requestAnimationFrame(() => { c.style.opacity = '0' }))
+    document.addEventListener('click', function(e) {
+      const a = e.target.closest('a[href]')
+      if (!a) return
+      const h = a.getAttribute('href')
+      if (!h || h[0] === '#' || h.includes('://') || h.startsWith('mailto')) return
+      e.preventDefault()
+      c.style.opacity = '1'
+      c.style.pointerEvents = 'all'
+      setTimeout(() => { location.href = h }, 560)
+    })
   })()
 
   </script>
