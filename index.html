@@ -33,7 +33,7 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: auto; }
 
     body {
       background: var(--ivory);
@@ -1012,73 +1012,10 @@
       transition: opacity 0.4s ease;
     }
 
-    /* ── Horizontal photo strip ── */
-    #strip-section {
-      overflow: hidden;
-      height: 100svh;
-      background: var(--parchment);
-    }
-    #strip-track {
-      display: flex;
-      align-items: center;
-      height: 100%;
-      gap: 1.5rem;
-      padding: 0 7vw;
-      will-change: transform;
-    }
-    .strip-intro-card {
-      flex-shrink: 0;
-      width: 20vw;
-      min-width: 160px;
-      height: 80svh;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding-bottom: 2.5rem;
-    }
-    .strip-intro-title {
-      font-family: var(--serif);
-      font-style: italic;
-      font-weight: 300;
-      font-size: clamp(1.8rem, 3.2vw, 3rem);
-      line-height: 1.15;
-      color: var(--ink);
-    }
-    .strip-intro-title em { color: var(--gold); font-style: normal; }
-    .strip-scroll-hint {
-      margin-top: 1.2rem;
-      font-size: 0.56rem;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      color: var(--ink-30);
-    }
-    .strip-card {
-      flex-shrink: 0;
-      width: 28vw;
-      height: 80svh;
-      overflow: hidden;
-      border-radius: 2px;
-      position: relative;
-    }
-    .strip-card img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.8s var(--ease-film);
-    }
-    .strip-card:hover img { transform: scale(1.04); }
-    @media (max-width: 768px) {
-      .strip-intro-card { width: 60vw; }
-      .strip-card { width: 70vw; height: 72svh; }
-    }
-    @media (max-width: 480px) {
-      .strip-card { width: 80vw; height: 64svh; }
-      .strip-intro-card { width: 72vw; }
-    }
-
   </style>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 </head>
 <body>
@@ -1166,23 +1103,12 @@
     </div>
   </section>
 
-  <!-- HORIZONTAL PHOTO STRIP -->
-  <div id="strip-section">
-    <div id="strip-track">
-      <div class="strip-intro-card">
-        <p class="strip-intro-title">A glimpse<br><em>from the day</em></p>
-        <p class="strip-scroll-hint">Scroll to explore →</p>
-      </div>
-      <!-- cards injected by JS -->
-    </div>
-  </div>
-
   <!-- PARALLAX INTERLUDE 1 -->
   <div class="interlude" id="il1"></div>
 
   <!-- GALLERY -->
   <section id="gallery">
-    <div class="gallery-intro reveal">
+    <div class="gallery-intro">
       <span class="gallery-intro-label">3rd May 2026 &nbsp;·&nbsp; ৩রা মে ২০২৬</span>
       <h2 class="gallery-intro-title">The Wedding</h2>
     </div>
@@ -1195,7 +1121,7 @@
   <!-- DOWNLOAD -->
   <section id="download">
     <div class="dl-glow"></div>
-    <div class="reveal" id="dl-body">
+    <div id="dl-body">
       <h2 class="dl-heading">Captured with love.<br><em>Kept forever.</em></h2>
       <div class="dl-btns">
         <button class="btn-dl"             onclick="dlAll('photo',this)">Photos</button>
@@ -1320,25 +1246,6 @@
   })()
 
 
-  // ─── HERO PARALLAX ────────────────────────────────────────────────────
-  ;(function() {
-    const txt  = document.getElementById('hero-text')
-    const arch = document.querySelector('.hero-arch')
-    let   ticking = false
-
-    window.addEventListener('scroll', () => {
-      if (ticking) return
-      ticking = true
-      requestAnimationFrame(() => {
-        const y = window.scrollY
-        if (y < window.innerHeight) {
-          txt.style.transform  = `translateY(${y * 0.22}px)`
-          arch.style.transform = `translate(-50%, calc(-50% + ${y * 0.10}px))`
-        }
-        ticking = false
-      })
-    }, { passive: true })
-  })()
 
 
 
@@ -1357,10 +1264,8 @@
     </div>`
   }
 
-  function photoCard(m, i) {
-    // Cap stagger so the 10th+ card doesn't wait forever
-    const delay = Math.min(i, 9) * 55
-    return `<div class="photo-card reveal" style="--delay:${delay}ms"
+  function photoCard(m) {
+    return `<div class="photo-card"
          data-src="${m.src}" data-type="photo">
       <img src="${m.th}" alt="${m.cap}" loading="lazy" onload="this.classList.add('loaded')">
       <div class="pc-overlay">
@@ -1371,9 +1276,8 @@
     </div>`
   }
 
-  function videoCard(m, i) {
-    const delay = Math.min(i, 5) * 70
-    return `<div class="video-card reveal" style="--delay:${delay}ms"
+  function videoCard(m) {
+    return `<div class="video-card"
          data-src="${m.src}" data-type="video">
       <img src="${m.th}" alt="${m.cap}" loading="lazy" onload="this.classList.add('loaded')">
       <div class="vc-overlay">
@@ -1401,7 +1305,7 @@
       const num    = String(ci + 1).padStart(2, '0')
       return `
         <div class="creator-block">
-          <span class="creator-num reveal">${num}</span>
+          <span class="creator-num">${num}</span>
           <div class="creator-eyebrow"><span></span><i></i><span></span></div>
           <h2 class="creator-name">${c.label}</h2>
           ${ornHtml()}
@@ -1416,20 +1320,6 @@
           : ''}
       `
     }).join('')
-  }
-
-
-  // ─── HORIZONTAL STRIP ────────────────────────────────────────────────
-  function buildStrip() {
-    const track = document.getElementById('strip-track')
-    if (!track) return
-    const R2 = 'https://pub-1bab4a8b6280486dbe1ad8b1512bcbda.r2.dev'
-    const nums = ['0001','0002','0003','0004','0005','0006','0007','0008','0009','0010','0011','0012']
-    track.insertAdjacentHTML('beforeend', nums.map((n, i) => `
-      <div class="strip-card">
-        <img src="${R2}/sahid/photos/${n}.jpg" alt="" loading="${i < 4 ? 'eager' : 'lazy'}">
-      </div>
-    `).join(''))
   }
 
 
@@ -1457,22 +1347,6 @@
   function buildInterludes() {
     document.getElementById('il1').style.backgroundImage = "url('hero-DSCF2910.jpg')"
     document.getElementById('il2').style.backgroundImage = "url('hero-DSCF3430.jpg')"
-  }
-
-
-  // ─── SCROLL REVEAL ────────────────────────────────────────────────────
-  function initReveal() {
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (!e.isIntersecting) return
-        e.target.classList.add('in')
-        // Add scale-in for photo cards
-        if (e.target.classList.contains('photo-card')) e.target.classList.add('scale-in')
-        obs.unobserve(e.target)
-      })
-    }, { threshold: 0.06, rootMargin: '0px 0px -20px 0px' })
-
-    document.querySelectorAll('.reveal, .orn').forEach(el => obs.observe(el))
   }
 
 
@@ -1589,80 +1463,114 @@
 
   // ─── INIT ─────────────────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', () => {
-    buildStrip()
     buildGallery()
     initMasonryMobile()
     buildInterludes()
-    initReveal()
   })
 
-  // ─── GSAP ANIMATIONS ────────────────────────────────────────────────────
+  // ─── GSAP + LENIS ───────────────────────────────────────────────────────
   gsap.registerPlugin(ScrollTrigger)
 
-  // Wait for gallery to render
   window.addEventListener('load', function() {
 
-    // Horizontal photo strip
-    var stripTrack = document.getElementById('strip-track')
-    if (stripTrack) {
-      var getAmt = function() { return stripTrack.scrollWidth - window.innerWidth }
-      gsap.to(stripTrack, {
-        x: function() { return -getAmt() },
-        ease: 'none',
-        scrollTrigger: {
-          trigger: '#strip-section',
-          pin: true,
-          scrub: 1,
-          end: function() { return '+=' + getAmt() },
-          invalidateOnRefresh: true
+    // ── Lenis smooth scroll ──────────────────────────────────────────────
+    var lenis = new Lenis({ lerp: 0.08, smoothWheel: true })
+    lenis.on('scroll', ScrollTrigger.update)
+    gsap.ticker.add(function(time) { lenis.raf(time * 1000) })
+    gsap.ticker.lagSmoothing(0)
+
+    // Lenis-driven hero parallax (smoother than window.scrollY)
+    var heroTxt  = document.getElementById('hero-text')
+    var heroArch = document.querySelector('.hero-arch')
+    if (heroTxt && heroArch) {
+      lenis.on('scroll', function(e) {
+        var y = e.scroll
+        if (y < window.innerHeight) {
+          heroTxt.style.transform  = 'translateY(' + (y * 0.22) + 'px)'
+          heroArch.style.transform = 'translate(-50%, calc(-50% + ' + (y * 0.10) + 'px))'
         }
       })
     }
 
-    // Batch reveal for all cards — more reliable than individual ScrollTriggers
+    // ── Photo & video card clip-path wipe reveals ────────────────────────
+    // Each card wipes up from nothing — feels premium, zero opacity flash
     ScrollTrigger.batch('.photo-card, .video-card', {
-      start: 'top 90%',
-      onEnter: function(batch) {
-        gsap.fromTo(batch, 
-          { y: 30, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.7, stagger: 0.06, ease: 'power2.out', overwrite: true }
-        )
-      },
-      once: true
-    })
-
-    // Creator blocks fade in
-    ScrollTrigger.batch('.creator-block', {
-      start: 'top 90%',
+      start: 'top 92%',
       onEnter: function(batch) {
         gsap.fromTo(batch,
-          { y: 40, opacity: 0 },
-          { y: 0, opacity: 1, duration: 1, ease: 'power3.out', overwrite: true }
+          { clipPath: 'inset(0 0 100% 0)', y: 12 },
+          { clipPath: 'inset(0 0 0% 0)', y: 0, duration: 0.95, stagger: 0.07, ease: 'power4.out', overwrite: true }
         )
       },
       once: true
     })
 
-    // Creator name text reveal — each letter animates in
+    // ── Creator name — letters rise from below a hidden baseline ─────────
     gsap.utils.toArray('.creator-name').forEach(function(el) {
       var text = el.textContent
-      el.innerHTML = text.split('').map(function(ch) {
-        return ch === ' ' ? ' ' : '<span style="display:inline-block">' + ch + '</span>'
-      }).join('')
+      el.style.overflow = 'hidden'
+      el.innerHTML = '<span style="display:inline-block">' +
+        text.split('').map(function(ch) {
+          return ch === ' '
+            ? '<span style="display:inline-block;width:0.28em"> </span>'
+            : '<span style="display:inline-block">' + ch + '</span>'
+        }).join('') +
+        '</span>'
+      var letters = el.querySelectorAll('span > span')
+      gsap.set(letters, { y: '120%', opacity: 0 })
       ScrollTrigger.create({
         trigger: el,
         start: 'top 88%',
         once: true,
         onEnter: function() {
-          gsap.fromTo(el.querySelectorAll('span'),
-            { y: 25, opacity: 0, rotateX: -50 },
-            { y: 0, opacity: 1, rotateX: 0, duration: 0.5, stagger: 0.04, ease: 'back.out(1.7)' }
-          )
+          gsap.to(letters, {
+            y: '0%', opacity: 1,
+            duration: 0.9, stagger: 0.038, ease: 'power3.out'
+          })
         }
       })
     })
 
-    // Parallax on interlude images
+    // ── Creator num + eyebrow fade in ────────────────────────────────────
+    gsap.utils.toArray('.creator-num').forEach(function(el) {
+      gsap.set(el, { opacity: 0, y: 10 })
+      ScrollTrigger.create({
+        trigger: el, start: 'top 92%', once: true,
+        onEnter: function() {
+          gsap.to(el, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' })
+        }
+      })
+    })
+
+    // ── Gallery intro section reveal ─────────────────────────────────────
+    var galleryIntro = document.querySelector('.gallery-intro')
+    if (galleryIntro) {
+      gsap.set(galleryIntro, { opacity: 0, y: 30 })
+      ScrollTrigger.create({
+        trigger: galleryIntro, start: 'top 88%', once: true,
+        onEnter: function() {
+          gsap.to(galleryIntro, { opacity: 1, y: 0, duration: 1.1, ease: 'power3.out' })
+        }
+      })
+    }
+
+    // ── Download section reveal ─────────────────────────────────────────
+    var dlBody = document.getElementById('dl-body')
+    if (dlBody) {
+      var dlHeading = dlBody.querySelector('.dl-heading')
+      var dlBtns    = dlBody.querySelectorAll('.btn-dl')
+      gsap.set([dlHeading, dlBtns], { opacity: 0, y: 30 })
+      ScrollTrigger.create({
+        trigger: dlBody, start: 'top 88%', once: true,
+        onEnter: function() {
+          gsap.timeline()
+            .to(dlHeading, { opacity: 1, y: 0, duration: 1.1, ease: 'power4.out' })
+            .to(dlBtns,    { opacity: 1, y: 0, duration: 0.7, stagger: 0.1, ease: 'power3.out' }, '-=0.5')
+        }
+      })
+    }
+
+    // ── Interlude parallax ───────────────────────────────────────────────
     gsap.utils.toArray('.interlude').forEach(function(el) {
       gsap.to(el, {
         backgroundPositionY: '30%',
@@ -1671,53 +1579,45 @@
       })
     })
 
-    // Download section reveal
-    var dlBody = document.getElementById('dl-body')
-    if (dlBody) {
+    // ── Ornament reveal ──────────────────────────────────────────────────
+    gsap.utils.toArray('.orn').forEach(function(el) {
       ScrollTrigger.create({
-        trigger: dlBody,
-        start: 'top 90%',
-        once: true,
-        onEnter: function() {
-          gsap.fromTo(dlBody, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'power3.out' })
-        }
+        trigger: el, start: 'top 92%', once: true,
+        onEnter: function() { el.classList.add('in') }
       })
-    }
+    })
 
-    // Desktop-only interactions (skip on touch devices)
+    // ── Desktop-only interactions ────────────────────────────────────────
     var isTouch = window.matchMedia('(hover: none)').matches
-
     if (!isTouch) {
       // Magnetic buttons
-      document.querySelectorAll('.btn, .btn-outline, .btn-gold, .btn-dl').forEach(function(btn) {
+      document.querySelectorAll('.btn, .btn-dl').forEach(function(btn) {
         btn.addEventListener('mousemove', function(e) {
           var rect = btn.getBoundingClientRect()
-          var x = e.clientX - rect.left - rect.width / 2
-          var y = e.clientY - rect.top - rect.height / 2
-          gsap.to(btn, { x: x * 0.3, y: y * 0.3, duration: 0.3, ease: 'power2.out' })
+          gsap.to(btn, {
+            x: (e.clientX - rect.left - rect.width  / 2) * 0.28,
+            y: (e.clientY - rect.top  - rect.height / 2) * 0.28,
+            duration: 0.3, ease: 'power2.out'
+          })
         })
         btn.addEventListener('mouseleave', function() {
-          gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.5)' })
+          gsap.to(btn, { x: 0, y: 0, duration: 0.6, ease: 'elastic.out(1, 0.5)' })
         })
       })
 
-      // Photo card 3D tilt
+      // Subtle photo card tilt — reduced intensity so it doesn't fight clip-path reveal
       document.querySelectorAll('.photo-card').forEach(function(card) {
         card.addEventListener('mousemove', function(e) {
           var rect = card.getBoundingClientRect()
-          var x = (e.clientX - rect.left) / rect.width - 0.5
-          var y = (e.clientY - rect.top) / rect.height - 0.5
+          var x = (e.clientX - rect.left) / rect.width  - 0.5
+          var y = (e.clientY - rect.top)  / rect.height - 0.5
           gsap.to(card, {
-            rotateY: x * 15,
-            rotateX: -y * 15,
-            scale: 1.02,
-            duration: 0.3,
-            ease: 'power2.out',
-            transformPerspective: 600
+            rotateY: x * 8, rotateX: -y * 8, scale: 1.018,
+            duration: 0.35, ease: 'power2.out', transformPerspective: 800
           })
         })
         card.addEventListener('mouseleave', function() {
-          gsap.to(card, { rotateY: 0, rotateX: 0, scale: 1, duration: 0.5, ease: 'elastic.out(1, 0.6)' })
+          gsap.to(card, { rotateY: 0, rotateX: 0, scale: 1, duration: 0.55, ease: 'elastic.out(1, 0.5)' })
         })
       })
     }
